@@ -1,0 +1,14 @@
+client
+tls-client
+ca {{ openvpn_config_directory }}/certs/ca.crt
+cert {{ openvpn_config_directory }}/certs/client.crt
+key {{ openvpn_config_directory }}/private/client.key
+tls-crypt {{ openvpn_config_directory }}/myvpn.tlsauth
+remote-cert-eku "TLS Web Client Authentication"
+proto udp
+remote {{ openvpn_client_server }} 1194 udp
+dev tun
+topology subnet
+pull
+user nobody
+group nobody

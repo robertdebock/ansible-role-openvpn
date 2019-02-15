@@ -1,0 +1,120 @@
+---
+# tasks file for openvpn
+- name: test veriables and environment
+  assert:
+    that:
+      - openvpn_package_state is defined
+      - openvpn_package_state == "present" or
+        openvpn_package_state == "latest" or
+        openvpn_package_state == "absent"
+      - openvpn_ignore_docker is defined
+      - openvpn_ignore_docker or
+        not openvpn_ignore_docker
+
+- name: install openvpn
+  package:
+    name: "{{ openvpn_packages }}"
+    state: "{{ openvpn_package_state }}"
+  register: openvpn_install_openvpn
+  until: openvpn_install_openvpn is succeeded
+  retries: 3
+
+- name: generate static encryption key locally
+  command: openvpn --genkey --secret myvpn.tlsauth
+  args:
+    creates: myvpn.tlsauth
+  delegate_to: localhost
+  become: no
+
+- name: copy static encryption key
+  copy:
+    src: myvpn.tlsauth
+    dest: "{{ openvpn_config_directory }}/myvpn.tlsauth"
+
+- name: generate dh2048 key
+  command: openssl dhparam -out {{ openvpn_config_directory }}/dh2048.pem 2048
+  args:
+    creates: "{{ openvpn_config_directory }}/dh2048.pem"
+  when:
+    - openvpn_server is defined
+    - openvpn_server
+
+# - name: save the ca key from the openvpn server into memory
+#   slurp:
+#     src: /etc/pki/tls/private/ca.pem
+#   register: ca_key
+#   when:
+#     - openvpn_server is defined
+#     - openvpn_server
+
+# - name: place the ca key in the openvpn directory
+#   copy:
+#     content: "{{ ca_key['content'] | b64decode }}"
+#     dest: "{{ openvpn_config_directory }}/ca.key"
+#     mode: "0600"
+#   when:
+#     - ca_key is defined
+#     - not ca_key.skipped
+
+# - name: save the ca certificate from the openvpn server into memory
+#   slurp:
+#     src: /etc/pki/tls/certs/ca.crt
+#   register: ca_crt
+#   when:
+#     - openvpn_server is defined
+#     - openvpn_server
+
+# - name: place the ca certificate in the openvpn directory
+#   copy:
+#     content: "{{ ca_crt['content'] | b64decode }}"
+#     dest: "{{ openvpn_config_directory }}/ca.crt"
+#   when:
+#     - ca_crt is defined
+#     - not ca_crt.skipped
+
+# - name: copy the server key in the openvpn directory
+#   copy:
+#     src: /etc/pki/tls/private/server.pem
+#     dest: "{{ openvpn_config_directory }}/server.key"
+#     remote_src: yes
+#     mode: "0600"
+#   when:
+#     - openvpn_server is defined
+#     - openvpn_server
+
+# - name: copy the server certificate in the openvpn directory
+#   copy:
+#     src: /etc/pki/tls/certs/server.crt
+#     dest: "{{ openvpn_config_directory }}/server.crt"
+#     remote_src: yes
+#   when:
+#     - openvpn_server is defined
+#     - openvpn_server
+
+- name: configure openvpn server
+  template:
+    src: "{{ openvpn_server_config_file }}.j2"
+    dest: "{{ openvpn_config_directory }}/{{ openvpn_server_config_file }}"
+  notify:
+    - restart openvpn
+  when:
+    - openvpn_server is defined
+    - openvpn_server
+
+- name: configure openvpn client
+  template:
+    src: "{{ openvpn_client_config_file }}.j2"
+    dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
+  when:
+    - openvpn_client is defined
+    - openvpn_client
+
+- name: start and enable openvpn server
+  service:
+    name: "{{ openvpn_service }}"
+    state: started
+    enabled: yes
+  when:
+    - ansible_virtualization_type != "docker" or openvpn_ignore_docker
+    - openvpn_server is defined
+    - openvpn_server

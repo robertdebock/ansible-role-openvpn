@@ -1,0 +1,7 @@
+---
+- robertdebock.bootstrap
+- robertdebock.ca
+- robertdebock.epel
+- robertdebock.python_pip
+- robertdebock.reboot
+- robertdebock.update

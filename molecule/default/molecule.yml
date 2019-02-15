@@ -1,0 +1,59 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: openvpn-alpine-edge
+    image: alpine:edge
+    command: sh -c "while true ; do sleep 1 ; done"
+  - name: openvpn-alpine-latest
+    image: alpine:latest
+    command: sh -c "while true ; do sleep 1 ; done"
+  - name: openvpn-archlinux
+    image: archlinux/base
+  - name: openvpn-centos-6
+    image: centos:6
+  - name: openvpn-centos-latest
+    image: centos:latest
+  - name: openvpn-debian-latest
+    image: debian:latest
+  - name: openvpn-debian-stable
+    image: debian:stable
+  - name: openvpn-debian-unstable
+    image: debian:unstable
+  - name: openvpn-fedora-latest
+    image: fedora:latest
+  - name: openvpn-fedora-rawhide
+    image: fedora:rawhide
+  - name: openvpn-opensuse-leap
+    image: opensuse:leap
+  - name: openvpn-opensuse-tumbleweed
+    image: opensuse:tumbleweed
+  - name: openvpn-ubuntu-latest
+    image: ubuntu:latest
+  - name: openvpn-ubuntu-rolling
+    image: ubuntu:artful
+  - name: openvpn-ubuntu-devel
+    image: ubuntu:devel
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        openvpn_ignore_docker: no
+    host_vars:
+      openvpn-fedora-rawhide:
+        ansible_python_interpreter: /usr/bin/python3
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: goss
+  lint:
+    name: yamllint

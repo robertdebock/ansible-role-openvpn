@@ -1,0 +1,31 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: openvpn-fedora-rawhide
+    image: fedora:rawhide
+    registry:
+      url: registry.fedoraproject.org
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        openvpn_ignore_docker: no
+    host_vars:
+      openvpn-fedora-rawhide:
+        ansible_python_interpreter: /usr/bin/python3
+  lint:
+    name: ansible-lint
+scenario:
+  name: fedora-rawhide
+verifier:
+  name: goss
+  lint:
+    name: yamllint

@@ -1,0 +1,19 @@
+---
+- name: Converge server
+  hosts: all
+  gather_facts: no
+  become: yes
+  serial: 30%
+
+  vars:
+    ca_openssl_path: /etc/openvpn
+    ca_requests:
+      - name: server
+    openvpn_server: yes
+
+  roles:
+    - role: robertdebock.bootstrap
+    - role: robertdebock.epel
+    - role: robertdebock.python_pip
+    - role: robertdebock.ca
+    - role: ansible-role-openvpn

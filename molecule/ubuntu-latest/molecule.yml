@@ -1,0 +1,26 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: openvpn-ubuntu-latest
+    image: ubuntu:latest
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        openvpn_ignore_docker: no
+  lint:
+    name: ansible-lint
+scenario:
+  name: ubuntu-latest
+verifier:
+  name: goss
+  lint:
+    name: yamllint

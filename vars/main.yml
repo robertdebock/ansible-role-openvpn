@@ -1,0 +1,26 @@
+---
+# vars file for openvpn
+_openvpn_requirements:
+  default:
+    - wget
+
+openvpn_requirements: "{{ _openvpn_requirements[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_requirements[ansible_distribution] | default(_openvpn_packages['default'])) }}"
+
+_openvpn_packages:
+  default:
+    - openvpn
+
+openvpn_packages: "{{ _openvpn_packages[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_packages[ansible_distribution] | default(_openvpn_packages['default'])) }}"
+
+_openvpn_config_directory:
+  default: /etc/openvpn
+
+openvpn_config_directory: "{{ _openvpn_config_directory[ansible_distribution] | default(_openvpn_config_directory['default']) }}"
+
+openvpn_server_config_file: server.conf
+openvpn_client_config_file: client.ovpn
+
+_openvpn_service:
+  default: openvpn@server
+
+openvpn_service: "{{ _openvpn_service[ansible_distribution] | default(_openvpn_service['default']) }}"

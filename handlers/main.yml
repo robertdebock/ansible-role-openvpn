@@ -1,0 +1,8 @@
+---
+# handlers file for openvpn
+- name: restart openvpn
+  service:
+    name: "{{ openvpn_service }}"
+    state: restarted
+  when:
+    - ansible_virtualization_type != "docker" or openvpn_ignore_docker
