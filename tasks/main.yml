@@ -19,77 +19,34 @@
   until: openvpn_install_openvpn is succeeded
   retries: 3
 
-- name: generate static encryption key locally
-  command: openvpn --genkey --secret myvpn.tlsauth
+- name: generate static encryption key
+  command: openvpn --genkey --secret {{ openvpn_static_encryption_key }}
   args:
-    creates: myvpn.tlsauth
-  delegate_to: localhost
-  become: no
-
-- name: copy static encryption key
-  copy:
-    src: myvpn.tlsauth
-    dest: "{{ openvpn_config_directory }}/myvpn.tlsauth"
-
-- name: generate dh2048 key
-  command: openssl dhparam -out {{ openvpn_config_directory }}/dh2048.pem 2048
-  args:
-    creates: "{{ openvpn_config_directory }}/dh2048.pem"
+    creates: "{{ openvpn_static_encryption_key }}"
   when:
     - openvpn_server is defined
     - openvpn_server
 
-# - name: save the ca key from the openvpn server into memory
-#   slurp:
-#     src: /etc/pki/tls/private/ca.pem
-#   register: ca_key
-#   when:
-#     - openvpn_server is defined
-#     - openvpn_server
+- name: save static encryption key
+  fetch:
+    src: "{{ openvpn_static_encryption_key }}"
+    dest: "{{ openvpn_local_static_encryption_key }}"
+  when:
+    - openvpn_server is defined
+    - openvpn_server
 
-# - name: place the ca key in the openvpn directory
-#   copy:
-#     content: "{{ ca_key['content'] | b64decode }}"
-#     dest: "{{ openvpn_config_directory }}/ca.key"
-#     mode: "0600"
-#   when:
-#     - ca_key is defined
-#     - not ca_key.skipped
+- name: distribute static encryption key
+  copy:
+    src: "{{ openvpn_static_encryption_key_filename }}"
+    dest: "{{ openvpn_static_encryption_key }}"
 
-# - name: save the ca certificate from the openvpn server into memory
-#   slurp:
-#     src: /etc/pki/tls/certs/ca.crt
-#   register: ca_crt
-#   when:
-#     - openvpn_server is defined
-#     - openvpn_server
-
-# - name: place the ca certificate in the openvpn directory
-#   copy:
-#     content: "{{ ca_crt['content'] | b64decode }}"
-#     dest: "{{ openvpn_config_directory }}/ca.crt"
-#   when:
-#     - ca_crt is defined
-#     - not ca_crt.skipped
-
-# - name: copy the server key in the openvpn directory
-#   copy:
-#     src: /etc/pki/tls/private/server.pem
-#     dest: "{{ openvpn_config_directory }}/server.key"
-#     remote_src: yes
-#     mode: "0600"
-#   when:
-#     - openvpn_server is defined
-#     - openvpn_server
-
-# - name: copy the server certificate in the openvpn directory
-#   copy:
-#     src: /etc/pki/tls/certs/server.crt
-#     dest: "{{ openvpn_config_directory }}/server.crt"
-#     remote_src: yes
-#   when:
-#     - openvpn_server is defined
-#     - openvpn_server
+- name: generate dh2048 key
+  command: openssl dhparam -out {{ openvpn_dh2048_key }} 2048
+  args:
+    creates: "{{ openvpn_dh2048_key }}"
+  when:
+    - openvpn_server is defined
+    - openvpn_server
 
 - name: configure openvpn server
   template:

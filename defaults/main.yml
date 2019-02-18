@@ -1,6 +1,9 @@
 ---
 # defaults file for openvpn
 
+# Generated keys are saved locally, in what directory do you want to save these files?
+openvpn_local_key_directory: /tmp
+
 # To update packages this role places on the system, set `openvpn_package_state` to `latest`.
 openvpn_package_state: present
 
