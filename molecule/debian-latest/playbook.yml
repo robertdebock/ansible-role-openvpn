@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: no
   become: yes
-  # serial: 30%
+  serial: 30%
 
   vars:
     openvpn_server: yes
