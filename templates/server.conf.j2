@@ -242,7 +242,8 @@ keepalive 10 120
 # The second parameter should be '0'
 # on the server and '1' on the clients.
 #tls-auth ta.key 0 # This file is secret
-tls-crypt myvpn.tlsauth
+#tls-auth {{ openvpn_static_encryption_key_filename }} 0 # This file is secret
+tls-crypt {{ openvpn_static_encryption_key_filename }} {{ openvpn_tls_crypt }}
 
 # Select a cryptographic cipher.
 # This config item must be copied to
@@ -273,7 +274,7 @@ cipher AES-256-CBC
 # You can uncomment this out on
 # non-Windows systems.
 user nobody
-group nobody
+group {{ openvpn_group }}
 
 # The persist options will try to avoid
 # accessing certain resources on restart

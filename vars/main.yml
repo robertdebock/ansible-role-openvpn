@@ -21,6 +21,18 @@ openvpn_local_static_encryption_key: "{{ openvpn_local_key_directory }}/{{ openv
 openvpn_server_config_file: server.conf
 openvpn_client_config_file: client.ovpn
 
+_openvpn_group:
+  default: nobody
+  Debian: nogroup
+  Ubuntu: nogroup
+
+_openvpn_tls_crypt:
+  yes: 0
+
+openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_server] | default(['1']) }}"
+
+openvpn_group: "{{ _openvpn_group[ansible_distribution] | default(_openvpn_group['default']) }}"
+
 _openvpn_service:
   default: openvpn@server
 
