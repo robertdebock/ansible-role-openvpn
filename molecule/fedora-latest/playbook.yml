@@ -6,9 +6,6 @@
   # serial: 30%
 
   vars:
-    ca_openssl_path: /etc/openvpn
-    ca_requests:
-      - name: server
     openvpn_server: yes
 
   roles:
@@ -16,5 +13,4 @@
     - role: robertdebock.buildtools
     - role: robertdebock.epel
     - role: robertdebock.python_pip
-    - role: robertdebock.ca
     - role: ansible-role-openvpn

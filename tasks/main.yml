@@ -19,6 +19,14 @@
   until: openvpn_install_openvpn is succeeded
   retries: 3
 
+- name: include ca role with set variables
+  include_role:
+    name: robertdebock.ca
+  vars:
+    ca_openssl_path: "{{ openvpn_config_directory }}"
+    ca_requests:
+      - name: server
+
 - name: generate static encryption key
   command: openvpn --genkey --secret {{ openvpn_static_encryption_key }}
   args:
