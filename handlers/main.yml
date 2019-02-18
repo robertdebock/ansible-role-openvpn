@@ -6,3 +6,8 @@
     state: restarted
   when:
     - ansible_virtualization_type != "docker" or openvpn_ignore_docker
+
+- name: remove static encryption key locally
+  file:
+    path: "{{ openvpn_static_encryption_key }}"
+    state: absent

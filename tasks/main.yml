@@ -28,16 +28,16 @@
     - openvpn_server
 
 - name: save static encryption key
-  fetch:
+  slurp:
     src: "{{ openvpn_static_encryption_key }}"
-    dest: "{{ openvpn_local_static_encryption_key }}"
+  register: openvpn_save_static_encryption_key
   when:
     - openvpn_server is defined
     - openvpn_server
 
 - name: distribute static encryption key
   copy:
-    src: "{{ openvpn_static_encryption_key_filename }}"
+    content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
     dest: "{{ openvpn_static_encryption_key }}"
 
 - name: generate dh2048 key
