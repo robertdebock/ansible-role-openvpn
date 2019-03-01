@@ -18,16 +18,13 @@ This example is taken from `molecule/default/playbook.yml`:
   serial: 30%
 
   vars:
-    ca_openssl_path: /etc/openvpn
-    ca_requests:
-      - name: server
     openvpn_server: yes
 
   roles:
     - role: robertdebock.bootstrap
+    - role: robertdebock.buildtools
     - role: robertdebock.epel
     - role: robertdebock.python_pip
-    - role: robertdebock.ca
     - role: robertdebock.openvpn
 
 ```
@@ -41,6 +38,9 @@ These variables are set in `defaults/main.yml`:
 ```yaml
 ---
 # defaults file for openvpn
+
+# Generated keys are saved locally, in what directory do you want to save these files?
+openvpn_local_key_directory: /tmp
 
 # To update packages this role places on the system, set `openvpn_package_state` to `latest`.
 openvpn_package_state: present
@@ -63,6 +63,7 @@ The following roles can be installed to ensure all requirements are met, using `
 ```yaml
 ---
 - robertdebock.bootstrap
+- robertdebock.buildtools
 - robertdebock.ca
 - robertdebock.epel
 - robertdebock.python_pip
@@ -90,7 +91,7 @@ This role has been tested against the following distributions and Ansible versio
 |alpine-edge*|yes|yes|yes*|
 |alpine-latest|yes|yes|yes*|
 |archlinux|yes|yes|yes*|
-|centos-6|yes|yes|yes*|
+|centos-6|no|no|no*|
 |centos-latest|yes|yes|yes*|
 |debian-latest|yes|yes|yes*|
 |debian-stable|yes|yes|yes*|
@@ -98,7 +99,6 @@ This role has been tested against the following distributions and Ansible versio
 |fedora-latest|yes|yes|yes*|
 |fedora-rawhide*|yes|yes|yes*|
 |opensuse-leap|yes|yes|yes*|
-|opensuse-tumbleweed|yes|yes|yes*|
 |ubuntu-devel*|yes|yes|yes*|
 |ubuntu-latest|yes|yes|yes*|
 |ubuntu-rolling|yes|yes|yes*|

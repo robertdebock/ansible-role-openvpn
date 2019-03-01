@@ -32,8 +32,6 @@ platforms:
     image: fedora:rawhide
   - name: openvpn-opensuse-leap
     image: opensuse:leap
-  - name: openvpn-opensuse-tumbleweed
-    image: opensuse:tumbleweed
   - name: openvpn-ubuntu-latest
     image: ubuntu:latest
   - name: openvpn-ubuntu-rolling

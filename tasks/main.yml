@@ -26,6 +26,16 @@
     ca_openssl_path: "{{ openvpn_config_directory }}"
     ca_requests:
       - name: server
+  when:
+    - openvpn_server is defined
+    - openvpn_server
+
+- name: show all hosts
+  debug:
+    var: ansible_play_hosts_all
+  when:
+    - openvpn_server is defined
+    - openvpn_server
 
 - name: generate static encryption key
   command: openvpn --genkey --secret {{ openvpn_static_encryption_key }}
