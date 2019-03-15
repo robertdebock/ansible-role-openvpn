@@ -44,4 +44,5 @@ galaxy_info:
     - rhel
     - ubuntu
 
-dependencies: []
+dependencies:
+  - robertdebock.ca
