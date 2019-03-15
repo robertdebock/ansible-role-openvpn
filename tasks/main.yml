@@ -1,9 +1,5 @@
 ---
 # tasks file for openvpn
-- name: test veriables and environment
-  assert:
-    that:
-
 - name: install openvpn
   package:
     name: "{{ openvpn_packages }}"
