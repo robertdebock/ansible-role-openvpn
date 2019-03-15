@@ -3,10 +3,10 @@ dependency:
   name: galaxy
   options:
     role-file: requirements.yml
-driver:
-  name: docker
 lint:
   name: yamllint
+driver:
+  name: docker
 platforms:
   - name: openvpn-alpine-edge
     image: alpine:edge
@@ -35,18 +35,13 @@ platforms:
   - name: openvpn-ubuntu-latest
     image: ubuntu:latest
   - name: openvpn-ubuntu-rolling
-    image: ubuntu:artful
+    image: ubuntu:rolling
   - name: openvpn-ubuntu-devel
     image: ubuntu:devel
+  - name: openvpn-ubuntu-latest
+    image: ubuntu:latest
 provisioner:
   name: ansible
-  inventory:
-    group_vars:
-      all:
-        openvpn_ignore_docker: no
-    host_vars:
-      openvpn-fedora-rawhide:
-        ansible_python_interpreter: /usr/bin/python3
   lint:
     name: ansible-lint
 scenario:

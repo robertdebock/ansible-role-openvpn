@@ -26,7 +26,6 @@ This example is taken from `molecule/default/playbook.yml`:
     - role: robertdebock.epel
     - role: robertdebock.python_pip
     - role: robertdebock.openvpn
-
 ```
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
@@ -41,15 +40,6 @@ These variables are set in `defaults/main.yml`:
 
 # Generated keys are saved locally, in what directory do you want to save these files?
 openvpn_local_key_directory: /tmp
-
-# To update packages this role places on the system, set `openvpn_package_state` to `latest`.
-openvpn_package_state: present
-
-# Some Docker containers do not allow managing services, rebooting and writing
-# to some locations in /etc. The role skips tasks that will typically fail in
-# Docker. With this parameter you can tell the role to -not- skip these tasks.
-openvpn_ignore_docker: yes
-
 ```
 
 Requirements

@@ -3,18 +3,11 @@
 - name: test veriables and environment
   assert:
     that:
-      - openvpn_package_state is defined
-      - openvpn_package_state == "present" or
-        openvpn_package_state == "latest" or
-        openvpn_package_state == "absent"
-      - openvpn_ignore_docker is defined
-      - openvpn_ignore_docker or
-        not openvpn_ignore_docker
 
 - name: install openvpn
   package:
     name: "{{ openvpn_packages }}"
-    state: "{{ openvpn_package_state }}"
+    state: present
   register: openvpn_install_openvpn
   until: openvpn_install_openvpn is succeeded
   retries: 3
@@ -90,6 +83,6 @@
     state: started
     enabled: yes
   when:
-    - ansible_virtualization_type != "docker" or openvpn_ignore_docker
+    - ansible_virtualization_type != "docker"
     - openvpn_server is defined
     - openvpn_server
