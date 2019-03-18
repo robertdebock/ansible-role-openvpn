@@ -16,6 +16,9 @@ This example is taken from `molecule/default/playbook.yml`:
   become: yes
   gather_facts: yes
 
+  vars:
+    openvpn_server: yes
+
   roles:
     - robertdebock.openvpn
 ```
@@ -28,9 +31,6 @@ The machine you are running this on, may need to be prepared. Tests have been do
   gather_facts: no
   become: yes
   serial: 30%
-
-  vars:
-    openvpn_server: yes
 
   roles:
     - role: robertdebock.bootstrap
