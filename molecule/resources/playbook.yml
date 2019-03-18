@@ -4,5 +4,8 @@
   become: yes
   gather_facts: yes
 
+  vars:
+    openvpn_server: yes
+
   roles:
     - ansible-role-openvpn

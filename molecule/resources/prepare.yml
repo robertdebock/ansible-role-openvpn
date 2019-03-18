@@ -5,9 +5,6 @@
   become: yes
   serial: 30%
 
-  vars:
-    openvpn_server: yes
-
   roles:
     - role: robertdebock.bootstrap
     - role: robertdebock.buildtools
