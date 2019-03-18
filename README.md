@@ -11,7 +11,19 @@ Example Playbook
 This example is taken from `molecule/default/playbook.yml`:
 ```yaml
 ---
-- name: Converge server
+- name: Converge
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - robertdebock.openvpn
+```
+
+The machine you are running this on, may need to be prepared. Tests have been done on machines prepared by this playbook:
+```yaml
+---
+- name: Prepare server
   hosts: all
   gather_facts: no
   become: yes
@@ -25,7 +37,6 @@ This example is taken from `molecule/default/playbook.yml`:
     - role: robertdebock.buildtools
     - role: robertdebock.epel
     - role: robertdebock.python_pip
-    - role: robertdebock.openvpn
 ```
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.

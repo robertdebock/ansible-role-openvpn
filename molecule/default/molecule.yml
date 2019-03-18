@@ -10,38 +10,56 @@ driver:
 platforms:
   - name: openvpn-alpine-edge
     image: alpine:edge
+    pre_build_image: yes
     command: sh -c "while true ; do sleep 1 ; done"
   - name: openvpn-alpine-latest
     image: alpine:latest
+    pre_build_image: yes
     command: sh -c "while true ; do sleep 1 ; done"
   - name: openvpn-archlinux
     image: archlinux/base
+    pre_build_image: yes
   - name: openvpn-centos-6
     image: centos:6
+    pre_build_image: yes
   - name: openvpn-centos-latest
     image: centos:latest
+    pre_build_image: yes
   - name: openvpn-debian-latest
     image: debian:latest
+    pre_build_image: yes
   - name: openvpn-debian-stable
     image: debian:stable
+    pre_build_image: yes
   - name: openvpn-debian-unstable
     image: debian:unstable
+    pre_build_image: yes
   - name: openvpn-fedora-latest
     image: fedora:latest
+    pre_build_image: yes
   - name: openvpn-fedora-rawhide
     image: fedora:rawhide
+    pre_build_image: yes
   - name: openvpn-opensuse-leap
     image: opensuse:leap
+    pre_build_image: yes
   - name: openvpn-ubuntu-latest
     image: ubuntu:latest
+    pre_build_image: yes
   - name: openvpn-ubuntu-rolling
     image: ubuntu:rolling
+    pre_build_image: yes
   - name: openvpn-ubuntu-devel
     image: ubuntu:devel
+    pre_build_image: yes
   - name: openvpn-ubuntu-latest
     image: ubuntu:latest
+    pre_build_image: yes
 provisioner:
   name: ansible
+  playbooks:
+    prepare: ../resources/prepare.yml
+    converge: ../resources/playbook.yml
   lint:
     name: ansible-lint
 scenario:
