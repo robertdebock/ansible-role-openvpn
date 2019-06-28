@@ -28,7 +28,7 @@
       register: openvpn_save_static_encryption_key
   when:
     - openvpn_server is defined
-    - openvpn_server
+    - openvpn_server | bool
 
 - name: distribute static encryption key
   copy:
@@ -49,7 +49,7 @@
         - restart openvpn
   when:
     - openvpn_server is defined
-    - openvpn_server
+    - openvpn_server | bool
 
 - name: configure openvpn client
   template:
@@ -57,7 +57,7 @@
     dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
   when:
     - openvpn_client is defined
-    - openvpn_client
+    - openvpn_client | bool
 
 - name: start and enable openvpn server
   service:
@@ -67,4 +67,4 @@
   when:
     - ansible_virtualization_type != "docker"
     - openvpn_server is defined
-    - openvpn_server
+    - openvpn_server | bool
