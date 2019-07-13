@@ -25,9 +25,6 @@ platforms:
   - name: openvpn-centos-latest
     image: centos:latest
     pre_build_image: yes
-  - name: openvpn-debian-latest
-    image: debian:latest
-    pre_build_image: yes
   - name: openvpn-debian-stable
     image: debian:stable
     pre_build_image: yes
