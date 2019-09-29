@@ -8,9 +8,9 @@ openvpn_packages: "{{ _openvpn_packages[ansible_distribution ~ '-' ~ ansible_dis
 
 _openvpn_config_directory:
   default: /etc/openvpn
-  Fedora: /etc/openvpn/server
+  RedHat: /etc/openvpn/server
 
-openvpn_config_directory: "{{ _openvpn_config_directory[ansible_distribution] | default(_openvpn_config_directory['default']) }}"
+openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
 
 openvpn_static_encryption_key_filename: "myvpn.tlsauth"
 openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
@@ -24,14 +24,13 @@ openvpn_client_config_file: client.ovpn
 _openvpn_group:
   default: nobody
   Debian: nogroup
-  Ubuntu: nogroup
+
+openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 
 _openvpn_tls_crypt:
   yes: 0
 
 openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_server] | default(['1']) }}"
-
-openvpn_group: "{{ _openvpn_group[ansible_distribution] | default(_openvpn_group['default']) }}"
 
 _openvpn_service:
   default: openvpn@server
