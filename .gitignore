@@ -1,5 +1,4 @@
-molecule/*/.molecule
+.molecule
 *.log
 *.swp
-myvpn.tlsauth
 .tox
