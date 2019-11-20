@@ -1,10 +1,7 @@
 ---
 # vars file for openvpn
-_openvpn_packages:
-  default:
-    - openvpn
-
-openvpn_packages: "{{ _openvpn_packages[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_packages[ansible_distribution] | default(_openvpn_packages['default'])) }}"
+openvpn_packages:
+  - openvpn
 
 _openvpn_config_directory:
   default: /etc/openvpn
