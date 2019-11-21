@@ -13,7 +13,7 @@
       include_role:
         name: robertdebock.ca
       vars:
-        ca_openssl_path: "{{ openvpn_config_directory }}"
+        ca_openssl_path: "{{ openvpn_certs_directory }}"
         ca_requests:
           - name: server
 

@@ -9,6 +9,12 @@ _openvpn_config_directory:
 
 openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
 
+_openvpn_certs_directory:
+  default: "{{ openvpn_config_directory }}"
+  RedHat: "{{ openvpn_config_directory }}/certs"
+
+openvpn_certs_directory: "{{ _openvpn_certs_directory[ansible_os_family] | default(_openvpn_certs_directory['default']) }}"
+
 openvpn_static_encryption_key_filename: "myvpn.tlsauth"
 openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
 openvpn_dh2048_key: "{{ openvpn_config_directory }}/dh2048.pem"
