@@ -11,7 +11,6 @@ openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | def
 
 _openvpn_certs_directory:
   default: "{{ openvpn_config_directory }}"
-  RedHat: "{{ openvpn_config_directory }}/certs"
 
 openvpn_certs_directory: "{{ _openvpn_certs_directory[ansible_os_family] | default(_openvpn_certs_directory['default']) }}"
 
