@@ -36,9 +36,8 @@ openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_server] | default(['1']) }}"
 
 _openvpn_service:
   default: openvpn@server
-  Fedora: openvpn-server@server
-  CentOS-8: openvpn-server@server
-  RedHat-8: openvpn-server@server
+  RedHat-7: openvpn@server
+  RedHat: openvpn-server@server
   Ubuntu: openvpn
 
-openvpn_service: "{{ __openvpn_service[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[ansible_distribution] | default(_openvpn_service['default'])) }}"
+openvpn_service: "{{ _openvpn_service[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[ansible_os_family] | default(_openvpn_service['default'])) }}"
