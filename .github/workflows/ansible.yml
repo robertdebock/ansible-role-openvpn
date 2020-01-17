@@ -29,10 +29,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - image: "amazonlinux"
-            tag: "1"
-          - image: "amazonlinux"
-            tag: "latest"
           - image: "alpine"
             tag: "latest"
           - image: "alpine"
