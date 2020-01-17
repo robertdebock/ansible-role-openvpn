@@ -29,10 +29,6 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - image: "alpine"
-            tag: "latest"
-          - image: "alpine"
-            tag: "edge"
           - image: "debian"
             tag: "latest"
           - image: "debian"
