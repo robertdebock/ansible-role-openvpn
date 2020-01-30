@@ -77,6 +77,13 @@ The following roles can be installed to ensure all requirements are met, using `
 
 ```
 
+Dependencies
+------------
+
+Most roles require some kind of preparation, this is done in `molecule/default/prepare.yml`. This role has a "hard" dependency on the following roles:
+
+- robertdebock.ca
+
 Context
 -------
 
