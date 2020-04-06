@@ -8,4 +8,4 @@
     openvpn_server: yes
 
   roles:
-    - ansible-role-openvpn
+    - role: ansible-role-openvpn

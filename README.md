@@ -20,7 +20,7 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
     openvpn_server: yes
 
   roles:
-    - robertdebock.openvpn
+    - role: robertdebock.openvpn
 ```
 
 The machine may need to be prepared using `molecule/resources/prepare.yml`:
