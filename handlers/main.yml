@@ -4,8 +4,3 @@
   service:
     name: "{{ openvpn_service }}"
     state: restarted
-
-- name: remove static encryption key locally
-  file:
-    path: "{{ openvpn_static_encryption_key }}"
-    state: absent
