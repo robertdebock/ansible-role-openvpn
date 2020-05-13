@@ -20,4 +20,5 @@ galaxy_info:
     - openvpn
     - centos
 
-dependencies:   - robertdebock.ca
+dependencies:
+  - robertdebock.ca
