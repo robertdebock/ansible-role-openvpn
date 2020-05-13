@@ -9,7 +9,7 @@
   retries: 3
 
 - block:
-    - name: include ca role with set variables
+    - name: include ca role
       include_role:
         name: robertdebock.ca
       vars:
