@@ -1,5 +1,8 @@
 ---
 # tasks file for openvpn
+- name: include assert.yml
+  include_tasks: assert.yml
+
 - name: install openvpn
   package:
     name: "{{ openvpn_packages }}"
