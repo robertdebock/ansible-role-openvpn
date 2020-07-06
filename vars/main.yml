@@ -1,5 +1,6 @@
 ---
 # vars file for openvpn
+
 openvpn_packages:
   - openvpn
 
