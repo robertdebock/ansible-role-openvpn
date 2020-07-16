@@ -7,9 +7,6 @@
   package:
     name: "{{ openvpn_packages }}"
     state: present
-  register: openvpn_install_openvpn
-  until: openvpn_install_openvpn is succeeded
-  retries: 3
 
 - block:
     - name: include ca role
