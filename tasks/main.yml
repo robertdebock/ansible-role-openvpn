@@ -8,14 +8,57 @@
     name: "{{ openvpn_packages }}"
     state: present
 
+- name: ensure openvpn config directory exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  loop:
+    - "{{ openvpn_config_directory }}/private"
+    - "{{ openvpn_config_directory }}/certs"
+
+- name: set server certificate parameters
+  set_fact:
+    ca_requests:
+      - name: server
+        extensions:
+          - "extendedKeyUsage = serverAuth"
+  when:
+    - openvpn_server is defined
+
 - block:
-    - name: include ca role
-      include_role:
-        name: robertdebock.ca
-      vars:
-        ca_openssl_path: "{{ openvpn_certs_directory }}"
-        ca_requests:
-          - name: server
+    - name: configure openvpn client
+      template:
+        src: "{{ openvpn_client_config_file }}.j2"
+        dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
+
+    - name: add clients to certificate requests list
+      set_fact:
+        ca_requests: "{{ ca_requests + [ item | combine({ 'extensions': ['extendedKeyUsage = clientAuth'] }) ] }}"
+      loop: "{{ openvpn_clients }}"
+
+  when:
+    - openvpn_clients is defined
+
+- name: generate keys and certificates (include ca role)
+  include_role:
+    name: robertdebock.ca
+
+- block:
+    - name: copy server key to config directory
+      copy:
+        remote_src: yes
+        src: "{{ ca_openssl_path }}/subject_keys/server.pem"
+        dest: "{{ openvpn_config_directory }}/private/server.pem" 
+
+    - name: copy server and ca certificates to config directory
+      copy:
+        remote_src: yes
+        src: "{{ ca_openssl_path }}/certs/{{ item }}"
+        dest: "{{ openvpn_config_directory }}/certs/{{ item }}"
+      loop:
+        - ca.crt
+        - server.crt
 
     - name: generate static encryption key
       command: openvpn --genkey --secret {{ openvpn_static_encryption_key }}
@@ -50,14 +93,6 @@
   when:
     - openvpn_server is defined
     - openvpn_server | bool
-
-- name: configure openvpn client
-  template:
-    src: "{{ openvpn_client_config_file }}.j2"
-    dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
-  when:
-    - openvpn_client is defined
-    - openvpn_client | bool
 
 - name: start and enable openvpn server
   service:
