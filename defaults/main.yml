@@ -3,3 +3,7 @@
 
 # Generated keys are saved locally, in what directory do you want to save these files?
 openvpn_local_key_directory: /tmp
+
+# List of vpn client certificate extensions
+client_extensions:
+  - "extendedKeyUsage = clientAuth"

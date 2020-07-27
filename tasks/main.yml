@@ -30,11 +30,12 @@
     - name: configure openvpn client
       template:
         src: "{{ openvpn_client_config_file }}.j2"
-        dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
+        dest: "{{ openvpn_config_directory }}/{{ item.name }}.ovpn"
+      loop: "{{ openvpn_clients }}"
 
     - name: add clients to certificate requests list
       set_fact:
-        ca_requests: "{{ ca_requests + [ item | combine({ 'extensions': ['extendedKeyUsage = clientAuth'] }) ] }}"
+        ca_requests: "{{ ca_requests + [ item | combine({ 'extensions': client_extensions }) ] }}"
       loop: "{{ openvpn_clients }}"
 
   when:
@@ -43,6 +44,12 @@
 - name: generate keys and certificates (include ca role)
   include_role:
     name: robertdebock.ca
+
+- name: fetch client config tarball
+  include_tasks: fetch_client_config.yml
+  when:
+    - openvpn_clients is defined
+    - openvpn_fetch_client_config_to is defined  
 
 - block:
     - name: copy server key to config directory

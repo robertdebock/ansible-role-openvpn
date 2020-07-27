@@ -1,8 +1,8 @@
 client
 tls-client
 ca {{ openvpn_config_directory }}/certs/ca.crt
-cert {{ openvpn_config_directory }}/certs/client.crt
-key {{ openvpn_config_directory }}/private/client.key
+cert {{ openvpn_config_directory }}/certs/{{ item.name }}.crt
+key {{ openvpn_config_directory }}/private/{{ item.name }}.key
 tls-crypt {{ openvpn_static_encryption_key }}
 remote-cert-eku "TLS Web Server Authentication"
 proto udp
