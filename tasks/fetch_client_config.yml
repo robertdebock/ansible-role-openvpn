@@ -1,30 +1,50 @@
 ---
-
-- name: copy keys to publication directory
+- name: copy static encryption key to publication directory
   copy:
     remote_src: yes
-    src: "{{ ca_openssl_path }}/subject_keys/{{ item.name }}.pem"
-    dest: "{{ ca_publication_location }}/{{ item.name }}.pem"
+    src: "{{ openvpn_static_encryption_key }}"
+    dest: "{{ openvpn_publication_location }}/{{ openvpn_static_encryption_key_filename }}"
+
+- name: copy ca.crt to publication directory
+  copy:
+    remote_src: yes
+    src: "{{ openvpn_ca_path }}/certs/ca.crt"
+    dest: "{{ openvpn_publication_location }}/ca.crt"
+    
+- name: copy client certificates to publication directory
+  copy:
+    remote_src: yes
+    src: "{{ openvpn_ca_path }}/certs/{{ item.name }}.crt"
+    dest: "{{ openvpn_publication_location }}/{{ item.name }}.crt"
+  loop: "{{ openvpn_clients }}"
+    
+- name: copy client keys to publication directory
+  copy:
+    remote_src: yes
+    src: "{{ openvpn_ca_path }}/subject_keys/{{ item.name }}.pem"
+    dest: "{{ openvpn_publication_location }}/{{ item.name }}.key"
   loop: "{{ openvpn_clients }}"
 
 - name: copy config files to publication directory
   copy:
     remote_src: yes
     src: "{{ openvpn_config_directory }}/{{ item.name }}.ovpn"
-    dest: "{{ ca_publication_location }}/{{ item.name }}.ovpn"
+    dest: "{{ openvpn_publication_location }}/{{ item.name }}.ovpn"
   loop: "{{ openvpn_clients }}"
 
 - name: create tarballs
   archive:
     path:
-      - "{{ ca_publication_location }}/{{ item.name }}.pem"
-      - "{{ ca_publication_location }}/{{ item.name }}.crt"
-      - "{{ ca_publication_location }}/{{ item.name }}.ovpn"
-    dest: "{{ ca_publication_location }}/{{ item.name }}.tgz"
+      - "{{ openvpn_publication_location }}/{{ openvpn_static_encryption_key_filename }}"
+      - "{{ openvpn_publication_location }}/ca.crt"
+      - "{{ openvpn_publication_location }}/{{ item.name }}.key"
+      - "{{ openvpn_publication_location }}/{{ item.name }}.crt"
+      - "{{ openvpn_publication_location }}/{{ item.name }}.ovpn"
+    dest: "{{ openvpn_publication_location }}/{{ item.name }}.tgz"
   loop: "{{ openvpn_clients }}"
 
 - name: fetch tarballs
   fetch:
-    src: "{{ ca_publication_location }}/{{ item.name }}.tgz"
+    src: "{{ openvpn_publication_location }}/{{ item.name }}.tgz"
     dest: "{{ openvpn_fetch_client_config_to }}"
   loop: "{{ openvpn_clients }}"

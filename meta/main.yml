@@ -19,3 +19,8 @@ galaxy_info:
   galaxy_tags:
     - openvpn
     - centos
+
+dependencies:
+  - role: robertdebock.ca
+    vars:
+      ca_init: yes

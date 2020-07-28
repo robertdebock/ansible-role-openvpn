@@ -63,7 +63,7 @@ These variables are set in `defaults/main.yml`:
 # defaults file for openvpn
 
 # Generated keys are saved locally, in what directory do you want to save these files?
-openvpn_local_key_directory: /tmp
+openvpn_publication_directory: /tmp
 ```
 
 ## [Requirements](#requirements)

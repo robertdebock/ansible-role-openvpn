@@ -1,8 +1,11 @@
 ---
 # defaults file for openvpn
 
+# CA path
+openvpn_ca_path: /etc/ssl/myCA
+
 # Generated keys are saved locally, in what directory do you want to save these files?
-openvpn_local_key_directory: /tmp
+openvpn_publication_location: /tmp/pub
 
 # List of vpn client certificate extensions
 client_extensions:

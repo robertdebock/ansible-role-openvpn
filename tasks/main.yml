@@ -1,7 +1,7 @@
 ---
 # tasks file for openvpn
-- name: include assert.yml
-  include_tasks: assert.yml
+# - name: include assert.yml
+#   include_tasks: assert.yml
 
 - name: install openvpn
   package:
@@ -44,24 +44,20 @@
 - name: generate keys and certificates (include ca role)
   include_role:
     name: robertdebock.ca
-
-- name: fetch client config tarball
-  include_tasks: fetch_client_config.yml
-  when:
-    - openvpn_clients is defined
-    - openvpn_fetch_client_config_to is defined  
-
+  vars:
+    ca_init: no
+      
 - block:
     - name: copy server key to config directory
       copy:
         remote_src: yes
-        src: "{{ ca_openssl_path }}/subject_keys/server.pem"
+        src: "{{ openvpn_ca_path }}/subject_keys/server.pem"
         dest: "{{ openvpn_config_directory }}/private/server.pem" 
 
     - name: copy server and ca certificates to config directory
       copy:
         remote_src: yes
-        src: "{{ ca_openssl_path }}/certs/{{ item }}"
+        src: "{{ openvpn_ca_path }}/certs/{{ item }}"
         dest: "{{ openvpn_config_directory }}/certs/{{ item }}"
       loop:
         - ca.crt
@@ -84,6 +80,12 @@
   copy:
     content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
     dest: "{{ openvpn_static_encryption_key }}"
+
+- name: fetch client config tarball
+  include_tasks: fetch_client_config.yml
+  when:
+    - openvpn_clients is defined
+    - openvpn_fetch_client_config_to is defined  
 
 - block:
     - name: generate dh2048 key
