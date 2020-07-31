@@ -22,5 +22,3 @@ galaxy_info:
 
 dependencies:
   - role: robertdebock.ca
-    vars:
-      ca_init: yes
