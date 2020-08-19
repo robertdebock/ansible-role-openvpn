@@ -4,3 +4,4 @@
     that:
       - openvpn_local_key_directory is defined
       - openvpn_local_key_directory | length > 0
+    quiet: yes
