@@ -107,9 +107,9 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |debian|buster, bullseye|
 |ubuntu|focal, bionic|
 
-The minimum version of Ansible required is 2.8 but tests have been done to:
+The minimum version of Ansible required is 2.9, tests have been done to:
 
-- The previous version, on version lower.
+- The previous version.
 - The current version.
 - The development version.
 
