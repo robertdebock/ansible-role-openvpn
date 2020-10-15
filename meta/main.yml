@@ -19,7 +19,6 @@ galaxy_info:
 
   galaxy_tags:
     - openvpn
-    - centos
 
 dependencies:
   - robertdebock.ca
