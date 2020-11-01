@@ -1,9 +1,10 @@
 ---
-- robertdebock.bootstrap
-- robertdebock.buildtools
-- robertdebock.ca
-- robertdebock.epel
-- robertdebock.openssl
-- robertdebock.python_pip
-- robertdebock.reboot
-- robertdebock.update
+roles:
+  - name: robertdebock.bootstrap
+  - name: robertdebock.buildtools
+  - name: robertdebock.ca
+  - name: robertdebock.epel
+  - name: robertdebock.openssl
+  - name: robertdebock.python_pip
+  - name: robertdebock.reboot
+  - name: robertdebock.update
