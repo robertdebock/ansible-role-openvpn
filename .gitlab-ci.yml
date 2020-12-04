@@ -1,0 +1,23 @@
+---
+image: robertdebock/github-action-molecule:2.6.6
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: "tcp://docker:2375"
+  PY_COLORS: 1
+
+molecule:
+  script:
+    - image=${image} tag=${tag} molecule test
+  parallel:
+    matrix:
+      - image: "debian"
+        tag: "latest"
+      - image: "debian"
+        tag: "bullseye"
+      - image: "ubuntu"
+        tag: "latest"
+      - image: "ubuntu"
+        tag: "bionic"
