@@ -1,0 +1,4 @@
+# Tests run on the previous and current (latest) version of Ansible.
+ansible>=2.9
+# Some Jinja2 filters are used that are available in the newer releases.
+jinja2>=2.11.2
