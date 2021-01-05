@@ -20,8 +20,6 @@ openvpn_static_encryption_key_filename: "myvpn.tlsauth"
 openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
 openvpn_dh2048_key: "{{ openvpn_config_directory }}/dh2048.pem"
 
-openvpn_local_static_encryption_key: "{{ openvpn_local_key_directory }}/{{ openvpn_static_encryption_key_filename }}"
-
 openvpn_server_config_file: server.conf
 openvpn_client_config_file: client.ovpn
 

@@ -1,8 +1,0 @@
----
-
-- name: test if openvpn_local_key_directory is set correctly
-  assert:
-    that:
-      - openvpn_local_key_directory is defined
-      - openvpn_local_key_directory is string
-    quiet: yes

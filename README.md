@@ -42,16 +42,6 @@ The machine needs to be prepared in CI this is done using `molecule/resources/pr
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
 
-## [Role Variables](#role-variables)
-
-These variables are set in `defaults/main.yml`:
-```yaml
----
-# defaults file for openvpn
-
-# Generated keys are saved locally, in what directory do you want to save these files?
-openvpn_local_key_directory: /tmp
-```
 
 ## [Requirements](#requirements)
 
