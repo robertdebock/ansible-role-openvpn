@@ -20,5 +20,4 @@ galaxy_info:
   galaxy_tags:
     - openvpn
 
-dependencies:
-  - robertdebock.ca
+dependencies: []
