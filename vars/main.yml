@@ -10,11 +10,7 @@ _openvpn_config_directory:
 
 openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
 
-_openvpn_certs_directory:
-  default: "{{ openvpn_config_directory }}"
-  RedHat: /etc/openvpn
-
-openvpn_certs_directory: "{{ _openvpn_certs_directory[ansible_os_family] | default(_openvpn_certs_directory['default']) }}"
+openvpn_certs_directory: /etc/openvpn
 
 openvpn_static_encryption_key_filename: "myvpn.tlsauth"
 openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
@@ -30,9 +26,10 @@ _openvpn_group:
 openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 
 _openvpn_tls_crypt:
-  yes: 0
+  client: 1
+  server: 0
 
-openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_server] | default(['1']) }}"
+openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_role] }}"
 
 _openvpn_service:
   default: openvpn@server
