@@ -1,0 +1,7 @@
+---
+# defaults file for openvpn
+
+# You can setup both a client and a server using this role.
+# Use `server` or `client` for `openvpn_role`.
+
+openvpn_role: server

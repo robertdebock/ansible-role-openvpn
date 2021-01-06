@@ -1,0 +1,9 @@
+---
+
+- name: test if openvpn_role is set correctly
+  assert:
+    that:
+      - openvpn_role is defined
+      - openvpn_role is string
+      - openvpn_role in [ "client", "server" ]
+    quiet: yes
