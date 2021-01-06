@@ -1,12 +1,17 @@
 ---
 # tasks file for openvpn
 
+- name: include assert.yml
+  include_tasks: assert.yml
+  run_once: yes
+
 - name: install openvpn
   package:
     name: "{{ openvpn_packages }}"
     state: present
 
-- block:
+- name: setup openvpn server
+  block:
     - name: include ca role
       include_role:
         name: robertdebock.ca
@@ -24,17 +29,7 @@
       slurp:
         src: "{{ openvpn_static_encryption_key }}"
       register: openvpn_save_static_encryption_key
-  when:
-    - openvpn_server is defined
-    - openvpn_server | bool
 
-- name: distribute static encryption key
-  copy:
-    content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
-    dest: "{{ openvpn_static_encryption_key }}"
-    mode: "0644"
-
-- block:
     - name: generate dh2048 key
       command: openssl dhparam -out {{ openvpn_dh2048_key }} 2048
       args:
@@ -48,23 +43,26 @@
       notify:
         - restart openvpn
   when:
-    - openvpn_server is defined
-    - openvpn_server | bool
+    - openvpn_role == "server"
 
-- name: configure openvpn client
-  template:
-    src: "{{ openvpn_client_config_file }}.j2"
-    dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
-    mode: "0644"
+- name: setup openvpn client
+  block:
+    - name: distribute static encryption key
+      copy:
+        content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
+        dest: "{{ openvpn_static_encryption_key }}"
+        mode: "0644"
+
+    - name: configure openvpn client
+      template:
+        src: "{{ openvpn_client_config_file }}.j2"
+        dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
+        mode: "0644"
   when:
-    - openvpn_client is defined
-    - openvpn_client | bool
+    - openvpn_role == "client"
 
 - name: start and enable openvpn server
   service:
     name: "{{ openvpn_service }}"
     state: started
     enabled: yes
-  when:
-    - openvpn_server is defined
-    - openvpn_server | bool
