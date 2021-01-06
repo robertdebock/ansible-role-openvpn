@@ -17,10 +17,35 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
   gather_facts: yes
 
   vars:
-    openvpn_server: yes
+    _openvpn_config_directory:
+      default: /etc/openvpn
+      RedHat: /etc/openvpn/server
+    openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
+    openvpn_static_encryption_key_filename: "myvpn.tlsauth"
+    openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
 
-  roles:
-    - role: robertdebock.openvpn
+  tasks:
+    - include_role:
+        name: robertdebock.openvpn
+      vars:
+        openvpn_role: server
+
+    - name: save static encryption key
+      slurp:
+        src: "{{ openvpn_static_encryption_key }}"
+      register: openvpn_save_static_encryption_key
+
+    - name: distribute static encryption key
+      copy:
+        content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
+        dest: "{{ openvpn_static_encryption_key }}"
+        mode: "0644"
+
+    - include_role:
+        name: robertdebock.openvpn
+      vars:
+        openvpn_role: client
+        openvpn_client_server: localhost
 ```
 
 The machine needs to be prepared in CI this is done using `molecule/resources/prepare.yml`:
@@ -42,6 +67,22 @@ The machine needs to be prepared in CI this is done using `molecule/resources/pr
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
 
+## [Role Variables](#role-variables)
+
+These variables are set in `defaults/main.yml`:
+```yaml
+---
+# defaults file for openvpn
+
+# You can setup both a client and a server using this role.
+# Use `server` or `client` for `openvpn_role`.
+
+openvpn_role: server
+
+# If you are configuring a client, setup these variables:
+# openvpn_role: client
+# openvpn_client_server: vpn.example.com
+```
 
 ## [Requirements](#requirements)
 
@@ -62,11 +103,6 @@ The following roles are used to prepare a system. You may choose to prepare your
 | [robertdebock.reboot](https://galaxy.ansible.com/robertdebock/reboot) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-reboot.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-reboot) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-reboot/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-reboot/actions) |
 | [robertdebock.update](https://galaxy.ansible.com/robertdebock/update) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-update.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-update) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-update/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-update/actions) |
 
-## [Dependencies](#dependencies)
-
-Most roles require some kind of preparation, this is done in `molecule/default/prepare.yml`. This role has a "hard" dependency on the following roles:
-
-- robertdebock.ca
 ## [Context](#context)
 
 This role is a part of many compatible roles. Have a look at [the documentation of these roles](https://robertdebock.nl/) for further information.

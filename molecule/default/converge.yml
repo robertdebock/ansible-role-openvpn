@@ -4,8 +4,33 @@
   become: yes
   gather_facts: yes
 
-  roles:
-    - role: ansible-role-openvpn
-      openvpn_role: server
-    - role: ansible-role-openvpn
-      openvpn_role: client
+  vars:
+    _openvpn_config_directory:
+      default: /etc/openvpn
+      RedHat: /etc/openvpn/server
+    openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
+    openvpn_static_encryption_key_filename: "myvpn.tlsauth"
+    openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
+
+  tasks:
+    - include_role:
+        name: ansible-role-openvpn
+      vars:
+        openvpn_role: server
+
+    - name: save static encryption key
+      slurp:
+        src: "{{ openvpn_static_encryption_key }}"
+      register: openvpn_save_static_encryption_key
+
+    - name: distribute static encryption key
+      copy:
+        content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
+        dest: "{{ openvpn_static_encryption_key }}"
+        mode: "0644"
+
+    - include_role:
+        name: ansible-role-openvpn
+      vars:
+        openvpn_role: client
+        openvpn_client_server: localhost
