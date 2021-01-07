@@ -16,36 +16,30 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
   become: yes
   gather_facts: yes
 
-  vars:
-    _openvpn_config_directory:
-      default: /etc/openvpn
-      RedHat: /etc/openvpn/server
-    openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
-    openvpn_static_encryption_key_filename: "myvpn.tlsauth"
-    openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
-
   tasks:
-    - include_role:
+    - name: create openvpn server
+      include_role:
         name: robertdebock.openvpn
       vars:
-        openvpn_role: server
+        openvpn_role: "server"
 
-    - name: save static encryption key
-      slurp:
-        src: "{{ openvpn_static_encryption_key }}"
-      register: openvpn_save_static_encryption_key
-
-    - name: distribute static encryption key
+    - name: copy certificates and keys from the server to the client
       copy:
-        content: "{{ openvpn_save_static_encryption_key.content | b64decode }}"
-        dest: "{{ openvpn_static_encryption_key }}"
-        mode: "0644"
+        src: /etc/openvpn/easy-rsa/pki/{{ item }}
+        dest: /etc/openvpn/client/{{ item | basename }}
+        remote_src: yes
+      loop:
+        - ca.crt
+        - issued/client.crt
+        - private/client.key
+        - ta.key
 
-    - include_role:
+    - name: create openvpn client
+      include_role:
         name: robertdebock.openvpn
       vars:
-        openvpn_role: client
-        openvpn_client_server: localhost
+        openvpn_role: "client"
+        openvpn_client_server: 127.0.0.1
 ```
 
 The machine needs to be prepared in CI this is done using `molecule/resources/prepare.yml`:
@@ -55,14 +49,13 @@ The machine needs to be prepared in CI this is done using `molecule/resources/pr
   hosts: all
   gather_facts: no
   become: yes
-  serial: 30%
 
   roles:
     - role: robertdebock.bootstrap
-    - role: robertdebock.buildtools
+    # - role: robertdebock.buildtools
     - role: robertdebock.epel
-    - role: robertdebock.python_pip
-    - role: robertdebock.openssl
+    # - role: robertdebock.python_pip
+    # - role: robertdebock.openssl
 ```
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
@@ -95,13 +88,7 @@ The following roles are used to prepare a system. You may choose to prepare your
 | Requirement | Travis | GitHub |
 |-------------|--------|--------|
 | [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-bootstrap.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-bootstrap) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-bootstrap/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-bootstrap/actions) |
-| [robertdebock.buildtools](https://galaxy.ansible.com/robertdebock/buildtools) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-buildtools.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-buildtools) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-buildtools/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-buildtools/actions) |
-| [robertdebock.ca](https://galaxy.ansible.com/robertdebock/ca) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-ca.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-ca) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-ca/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-ca/actions) |
 | [robertdebock.epel](https://galaxy.ansible.com/robertdebock/epel) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-epel.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-epel) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-epel/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-epel/actions) |
-| [robertdebock.openssl](https://galaxy.ansible.com/robertdebock/openssl) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-openssl.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-openssl) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-openssl/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-openssl/actions) |
-| [robertdebock.python_pip](https://galaxy.ansible.com/robertdebock/python_pip) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-python_pip.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-python_pip) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-python_pip/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-python_pip/actions) |
-| [robertdebock.reboot](https://galaxy.ansible.com/robertdebock/reboot) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-reboot.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-reboot) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-reboot/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-reboot/actions) |
-| [robertdebock.update](https://galaxy.ansible.com/robertdebock/update) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-update.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-update) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-update/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-update/actions) |
 
 ## [Context](#context)
 
@@ -116,6 +103,10 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 
 |container|tags|
 |---------|----|
+|amazon|Candidate|
+|debian|buster, bullseye|
+|el|7, 8|
+|fedora|all|
 |debian|buster, bullseye|
 |ubuntu|focal, bionic|
 

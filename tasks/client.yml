@@ -1,0 +1,19 @@
+---
+
+- name: ensure /etc/openvpn/client exists
+  file:
+    path: /etc/openvpn/client
+    state: directory
+    owner: root
+    group: "{{ openvpn_group }}"
+    mode: "0750"
+
+- name: place client.ovpn
+  template:
+    src: client.conf.j2
+    dest: /etc/openvpn/client/client.conf
+    owner: root
+    group: "{{ openvpn_group }}"
+    mode: "0640"
+  notify:
+    - restart openvpn
