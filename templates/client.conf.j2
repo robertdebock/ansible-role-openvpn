@@ -14,7 +14,7 @@ group {{ openvpn_group }}
 persist-key
 persist-tun
 key-direction 1
-tls-auth ta.key 1
+tls-auth /etc/openvpn/client/ta.key 1
 comp-lzo
 verb 3
 ca /etc/openvpn/client/ca.crt
