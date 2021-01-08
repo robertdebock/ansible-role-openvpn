@@ -3,11 +3,10 @@
   hosts: all
   gather_facts: no
   become: yes
-  serial: 30%
 
   roles:
     - role: robertdebock.bootstrap
-    - role: robertdebock.buildtools
+    # - role: robertdebock.buildtools
     - role: robertdebock.epel
-    - role: robertdebock.python_pip
-    - role: robertdebock.openssl
+    # - role: robertdebock.python_pip
+    # - role: robertdebock.openssl

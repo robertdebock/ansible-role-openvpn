@@ -1,40 +1,51 @@
 ---
 # vars file for openvpn
 
-openvpn_packages:
-  - openvpn
+# The packages differ for "server" and "client".
+_openvpn_packages:
+  server:
+    - openvpn
+    - easy-rsa
+  client:
+    - openvpn
 
-_openvpn_config_directory:
-  default: /etc/openvpn
-  RedHat: /etc/openvpn/server
+openvpn_packages: "{{ _openvpn_packages[openvpn_role] }}"
 
-openvpn_config_directory: "{{ _openvpn_config_directory[ansible_os_family] | default(_openvpn_config_directory['default']) }}"
+_openvpn_easyrsa_path:
+  default: /usr/share/easy-rsa/3
+  Debian: /usr/share/easy-rsa
 
-openvpn_certs_directory: /etc/openvpn
-
-openvpn_static_encryption_key_filename: "myvpn.tlsauth"
-openvpn_static_encryption_key: "{{ openvpn_config_directory }}/{{ openvpn_static_encryption_key_filename }}"
-openvpn_dh2048_key: "{{ openvpn_config_directory }}/dh2048.pem"
-
-openvpn_server_config_file: server.conf
-openvpn_client_config_file: client.ovpn
+openvpn_easyrsa_path: "{{ _openvpn_easyrsa_path[ansible_os_family] | default(_openvpn_easyrsa_path['default']) }}"
 
 _openvpn_group:
   default: nobody
   Debian: nogroup
+  RedHat: openvpn
+
+_openvpn_configuration_directory:
+  client:
+    default: /etc/openvpn/client
+    Debian: /etc/openvpn
+    RedHat-7: /etc/openvpn
+  server:
+    default: /etc/openvpn/server
+    Debian: /etc/openvpn
+    RedHat-7: /etc/openvpn
+
+openvpn_configuration_directory: "{{ _openvpn_configuration_directory[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_configuration_directory[openvpn_role][ansible_os_family] | default(_openvpn_configuration_directory[openvpn_role]['default'])) }}"
 
 openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 
-_openvpn_tls_crypt:
-  client: 1
-  server: 0
-
-openvpn_tls_crypt: "{{ _openvpn_tls_crypt[openvpn_role] }}"
-
 _openvpn_service:
-  default: openvpn@server
-  RedHat-7: openvpn@server
-  RedHat: openvpn-server@server
-  Ubuntu: openvpn
+  server:
+    default: openvpn@server
+    RedHat-7: openvpn@server
+    RedHat: openvpn-server@server
+    Ubuntu: openvpn
+  client:
+    default: openvpn@client
+    RedHat-7: openvpn@client
+    RedHat: openvpn-client@client
+    Ubuntu: openvpn
 
-openvpn_service: "{{ _openvpn_service[ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[ansible_os_family] | default(_openvpn_service['default'])) }}"
+openvpn_service: "{{ _openvpn_service[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[openvpn_role][ansible_os_family] | default(_openvpn_service[openvpn_role]['default'])) }}"

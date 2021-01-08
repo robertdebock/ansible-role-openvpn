@@ -5,50 +5,22 @@
   include_tasks: assert.yml
   run_once: yes
 
-- name: install openvpn
+- name: install openvpn packages
   package:
     name: "{{ openvpn_packages }}"
     state: present
 
 - name: setup openvpn server
-  block:
-    - name: include ca role
-      include_role:
-        name: robertdebock.ca
-      vars:
-        ca_openssl_path: "{{ openvpn_certs_directory }}"
-        ca_requests:
-          - name: server
-
-    - name: generate static encryption key
-      command: openvpn --genkey --secret {{ openvpn_static_encryption_key }}
-      args:
-        creates: "{{ openvpn_static_encryption_key }}"
-
-    - name: generate dh2048 key
-      command: openssl dhparam -out {{ openvpn_dh2048_key }} 2048
-      args:
-        creates: "{{ openvpn_dh2048_key }}"
-
-    - name: configure openvpn server
-      template:
-        src: "{{ openvpn_server_config_file }}.j2"
-        dest: "{{ openvpn_config_directory }}/{{ openvpn_server_config_file }}"
-        mode: "0644"
-      notify:
-        - restart openvpn
+  include: server.yml
   when:
     - openvpn_role == "server"
 
-- name: configure openvpn client
-  template:
-    src: "{{ openvpn_client_config_file }}.j2"
-    dest: "{{ openvpn_config_directory }}/{{ openvpn_client_config_file }}"
-    mode: "0644"
+- name: setup openvpn client
+  include: client.yml
   when:
     - openvpn_role == "client"
 
-- name: start and enable openvpn server
+- name: start and enable openvpn
   service:
     name: "{{ openvpn_service }}"
     state: started
