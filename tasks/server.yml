@@ -7,13 +7,13 @@
     mode: "0755"
 
 - name: easyrsa init-pki
-  command: /usr/share/easy-rsa/3/easyrsa init-pki
+  command: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki
 
 - name: easyrsa build-ca
-  command: /usr/share/easy-rsa/3/easyrsa build-ca nopass
+  command: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/ca.crt
@@ -21,25 +21,25 @@
     EASYRSA_BATCH: "yes"
 
 - name: easyrsa gen-dh
-  command: /usr/share/easy-rsa/3//easyrsa gen-dh
+  command: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/dh.pem
 
 - name: easyrsa build-server-full server nopass
-  command: /usr/share/easy-rsa/3/easyrsa build-server-full server nopass
+  command: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/server.crt
 
 - name: easyrsa build-client-full client nopass
-  command: /usr/share/easy-rsa/3/easyrsa build-client-full client nopass
+  command: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/client.crt
 
 - name: easyrsa gen-crl
-  command: /usr/share/easy-rsa/3/easyrsa gen-crl
+  command: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
   args:
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/crl.pem
