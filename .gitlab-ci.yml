@@ -38,8 +38,6 @@ molecule:
         tag: "bullseye"
       - image: "ubuntu"
         tag: "latest"
-      - image: "ubuntu"
-        tag: "bionic"
 
 galaxy:
   script:

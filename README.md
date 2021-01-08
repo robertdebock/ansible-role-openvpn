@@ -27,6 +27,7 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
       copy:
         src: /etc/openvpn/easy-rsa/pki/{{ item }}
         dest: /etc/openvpn/client/{{ item | basename }}
+        mode: "0640"
         remote_src: yes
       loop:
         - ca.crt
@@ -108,7 +109,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |el|7, 8|
 |fedora|all|
 |debian|buster, bullseye|
-|ubuntu|focal, bionic|
+|ubuntu|focal|
 
 The minimum version of Ansible required is 2.9, tests have been done to:
 
