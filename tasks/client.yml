@@ -8,10 +8,10 @@
     group: "{{ openvpn_group }}"
     mode: "0750"
 
-- name: place client.ovpn
+- name: place client.conf
   template:
     src: client.conf.j2
-    dest: /etc/openvpn/client/client.conf
+    dest: "{{ openvpn_client_configuration }}"
     owner: root
     group: "{{ openvpn_group }}"
     mode: "0640"
