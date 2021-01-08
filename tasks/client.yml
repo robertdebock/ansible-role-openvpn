@@ -11,7 +11,7 @@
 - name: place client.conf
   template:
     src: client.conf.j2
-    dest: "{{ openvpn_client_configuration }}"
+    dest: "{{ openvpn_configuration_directory }}/client.conf"
     owner: root
     group: "{{ openvpn_group }}"
     mode: "0640"

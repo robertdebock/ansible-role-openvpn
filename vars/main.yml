@@ -22,11 +22,11 @@ _openvpn_group:
   Debian: nogroup
   RedHat: openvpn
 
-_openvpn_client_configuration:
-  default: /etc/openvpn/client/client.conf
-  Debian: /etc/openvpn/client.conf
+_openvpn_configuration_directory:
+  default: /etc/openvpn/client
+  Debian: /etc/openvpn
 
-openvpn_client_configuration: "{{ _openvpn_client_configuration[ansible_os_family] | default(_openvpn_client_configuration['default']) }}"
+openvpn_configuration_directory: "{{ _openvpn_configuration_directory[ansible_os_family] | default(_openvpn_configuration_directory['default']) }}"
 
 openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 

@@ -68,7 +68,7 @@
 - name: place server.conf
   template:
     src: server.conf.j2
-    dest: /etc/openvpn/server/server.conf
+    dest: "{{ openvpn_configuration_directory }}/server.conf"
     owner: root
     group: "{{ openvpn_group }}"
     mode: "0640"
