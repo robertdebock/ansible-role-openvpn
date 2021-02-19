@@ -7,3 +7,5 @@ roles:
   # - name: robertdebock.python_pip
   # - name: robertdebock.reboot
   # - name: robertdebock.update
+collections:
+  - name: ansible.builtin

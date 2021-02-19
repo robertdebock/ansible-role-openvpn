@@ -1,7 +1,7 @@
 ---
 
 - name: ensure /etc/openvpn/easy-rsa exists
-  file:
+  ansible.builtin.file:
     path: /etc/openvpn/easy-rsa
     state: directory
     mode: "0755"
@@ -50,7 +50,7 @@
     creates: /etc/openvpn/easy-rsa/pki/ta.key
 
 - name: copy files to /etc/openvpn/server
-  copy:
+  ansible.builtin.copy:
     src: /etc/openvpn/easy-rsa/pki/{{ item }}
     dest: /etc/openvpn/server/{{ item | basename }}
     mode: "0640"
@@ -66,7 +66,7 @@
     - private/server.key
 
 - name: place server.conf
-  template:
+  ansible.builtin.template:
     src: server.conf.j2
     dest: "{{ openvpn_configuration_directory }}/server.conf"
     owner: root

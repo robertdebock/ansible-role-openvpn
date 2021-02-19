@@ -1,7 +1,7 @@
 ---
 
 - name: ensure /etc/openvpn/client exists
-  file:
+  ansible.builtin.file:
     path: /etc/openvpn/client
     state: directory
     owner: root
@@ -9,7 +9,7 @@
     mode: "0750"
 
 - name: place client.conf
-  template:
+  ansible.builtin.template:
     src: client.conf.j2
     dest: "{{ openvpn_configuration_directory }}/client.conf"
     owner: root

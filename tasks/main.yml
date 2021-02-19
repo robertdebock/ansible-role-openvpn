@@ -7,22 +7,22 @@
   delegate_to: localhost
 
 - name: install openvpn packages
-  package:
+  ansible.builtin.package:
     name: "{{ openvpn_packages }}"
     state: present
 
 - name: setup openvpn server
-  include: server.yml
+  ansible.builtin.include: server.yml
   when:
     - openvpn_role == "server"
 
 - name: setup openvpn client
-  include: client.yml
+  ansible.builtin.include: client.yml
   when:
     - openvpn_role == "client"
 
 - name: start and enable openvpn
-  service:
+  ansible.builtin.service:
     name: "{{ openvpn_service }}"
     state: started
     enabled: yes
