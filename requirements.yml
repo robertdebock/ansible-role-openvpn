@@ -1,11 +1,4 @@
 ---
 roles:
   - name: robertdebock.bootstrap
-  # - name: robertdebock.buildtools
   - name: robertdebock.epel
-  # - name: robertdebock.openssl
-  # - name: robertdebock.python_pip
-  # - name: robertdebock.reboot
-  # - name: robertdebock.update
-collections:
-  - name: ansible.builtin
