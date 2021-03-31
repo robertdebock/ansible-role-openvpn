@@ -12,7 +12,7 @@
         openvpn_role: "server"
 
     - name: copy certificates and keys from the server to the client
-      copy:
+      ansible.builtin.copy:
         src: /etc/openvpn/easy-rsa/pki/{{ item }}
         dest: /etc/openvpn/client/{{ item | basename }}
         mode: "0640"
