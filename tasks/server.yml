@@ -7,46 +7,46 @@
     mode: "0755"
 
 - name: easyrsa init-pki
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki
 
 - name: easyrsa build-ca
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/ca.crt
   environment:
     EASYRSA_BATCH: "yes"
 
 - name: easyrsa gen-dh
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/dh.pem
 
 - name: easyrsa build-server-full server nopass
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/server.crt
 
 - name: easyrsa build-client-full client nopass
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/client.crt
 
 - name: easyrsa gen-crl
-  ansible.builtin.command: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
-  args:
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/crl.pem
 
 - name: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
-  ansible.builtin.command: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
-  args:
+  ansible.builtin.command:
+    cmd: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
     creates: /etc/openvpn/easy-rsa/pki/ta.key
 
 - name: copy files to /etc/openvpn/server
