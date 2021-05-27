@@ -6,7 +6,7 @@
 
   tasks:
     - name: create openvpn server
-      include_role:
+      ansible.builtin.include_role:
         name: ansible-role-openvpn
       vars:
         openvpn_role: "server"
@@ -24,7 +24,7 @@
         - ta.key
 
     - name: create openvpn client
-      include_role:
+      ansible.builtin.include_role:
         name: ansible-role-openvpn
       vars:
         openvpn_role: "client"

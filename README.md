@@ -18,7 +18,7 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
 
   tasks:
     - name: create openvpn server
-      include_role:
+      ansible.builtin.include_role:
         name: robertdebock.openvpn
       vars:
         openvpn_role: "server"
@@ -36,7 +36,7 @@ This example is taken from `molecule/resources/converge.yml` and is tested on ea
         - ta.key
 
     - name: create openvpn client
-      include_role:
+      ansible.builtin.include_role:
         name: robertdebock.openvpn
       vars:
         openvpn_role: "client"
