@@ -11,15 +11,11 @@
     name: "{{ openvpn_packages }}"
     state: present
 
-- name: setup openvpn server
-  ansible.builtin.include: server.yml
+- name: setup openvpn server or client
+  ansible.builtin.include_tasks:
+    file: "{{ openvpn_role }}.yml"
   when:
     - openvpn_role == "server"
-
-- name: setup openvpn client
-  ansible.builtin.include: client.yml
-  when:
-    - openvpn_role == "client"
 
 - name: start and enable openvpn
   ansible.builtin.service:
