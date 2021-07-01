@@ -18,7 +18,6 @@ galaxy_info:
         - bullseye
     - name: EL
       versions:
-        - 7
         - 8
     - name: Fedora
       versions:
