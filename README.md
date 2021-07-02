@@ -106,7 +106,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |---------|----|
 |amazon|Candidate|
 |debian|buster, bullseye|
-|el|7, 8|
+|el|8|
 |fedora|all|
 |debian|buster, bullseye|
 |ubuntu|focal|
