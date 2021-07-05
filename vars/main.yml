@@ -20,8 +20,8 @@ openvpn_easyrsa_path: "{{ _openvpn_easyrsa_path[ansible_os_family] | default(_op
 _openvpn_group:
   default: nobody
   Debian: nogroup
-  RedHat: &RHEL openvpn
-  Rocky: *RHEL
+  RedHat: &redhat_group openvpn
+  Rocky: *redhat_group
 
 _openvpn_configuration_directory:
   client:
@@ -41,14 +41,14 @@ _openvpn_service:
   server:
     default: openvpn@server
     RedHat-7: openvpn@server
-    RedHat: &RHEL openvpn-server@server
-    Rocky: *RHEL
+    RedHat: &redhat_sever_service openvpn-server@server
+    Rocky: *redhat_sever_service
     Ubuntu: openvpn
   client:
     default: openvpn@client
     RedHat-7: openvpn@client
-    RedHat: &RHEL openvpn-client@client
-    Rocky: *RHEL
+    RedHat: &redhat_client_service openvpn-client@client
+    Rocky: *redhat_client_service
     Ubuntu: openvpn
 
 openvpn_service: "{{ _openvpn_service[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[openvpn_role][ansible_os_family] | default(_openvpn_service[openvpn_role]['default'])) }}"
