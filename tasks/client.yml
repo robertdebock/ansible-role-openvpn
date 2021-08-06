@@ -1,13 +1,5 @@
 ---
 
-- name: ensure /etc/openvpn/client exists
-  ansible.builtin.file:
-    path: /etc/openvpn/client
-    state: directory
-    owner: root
-    group: "{{ openvpn_group }}"
-    mode: "0750"
-
 - name: place client.conf
   ansible.builtin.template:
     src: client.conf.j2

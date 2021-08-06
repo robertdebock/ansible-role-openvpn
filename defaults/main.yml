@@ -9,3 +9,46 @@ openvpn_role: server
 # If you are configuring a client, setup these variables:
 # openvpn_role: client
 # openvpn_client_server: vpn.example.com
+
+openvpn_device: 'tun'
+openvpn_proto: 'udp'
+openvpn_port: 1194
+openvpn_ca: "{{ openvpn_configuration_directory }}/ca.crt"
+openvpn_cert: "{{ openvpn_configuration_directory }}/{{ openvpn_role }}.crt"
+openvpn_key: "{{ openvpn_configuration_directory }}/{{ openvpn_role }}.key"
+openvpn_dh: "{{ openvpn_configuration_directory }}/dh.pem"
+
+default_openvpn_options:
+  client:
+    - 'tls-client'
+    - 'pull'
+    - 'resolv-retry infinite'
+    - 'nobind'
+    - 'dhcp-option DNS 8.8.8.8'
+    - 'persist-key'
+    - 'persist-tun'
+    - 'key-direction 1'
+    - 'comp-lzo'
+    - 'verb 3'
+    - 'auth SHA512'
+  server:
+    - 'server 10.8.0.0 255.255.255.0'
+    - 'ifconfig-pool-persist ipp.txt'
+    - 'push "redirect-gateway def1 bypass-dhcp"'
+    - 'push "dhcp-option DNS 1.1.1.1"'
+    - 'push "dhcp-option DNS 1.0.0.1"'
+    - 'keepalive 10 120'
+    - 'cipher AES-256-CBC'
+    - 'persist-key'
+    - 'persist-tun'
+    - 'status openvpn-status.log'
+    - 'verb 3'
+    - 'explicit-exit-notify 1'
+    - 'remote-cert-eku "TLS Web Client Authentication"'
+
+# Host specific VPN overrides
+#ccd_hosts:
+#  foo:
+#    - 'push-reset'
+#    - 'ifconfig-push 10.8.0.2 10.8.0.1'
+#    - 'push "route 10.8.0.0 255.255.255.0"'

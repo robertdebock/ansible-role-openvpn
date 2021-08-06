@@ -14,38 +14,50 @@ openvpn_packages: "{{ _openvpn_packages[openvpn_role] }}"
 _openvpn_easyrsa_path:
   default: /usr/share/easy-rsa/3
   Debian: /usr/share/easy-rsa
+  FreeBSD: /usr/local/share/easy-rsa
 
 openvpn_easyrsa_path: "{{ _openvpn_easyrsa_path[ansible_os_family] | default(_openvpn_easyrsa_path['default']) }}"
+
+_openvpn_user:
+  default: nobody
+  FreeBSD: openvpn
+
+openvpn_user: "{{ _openvpn_user[ansible_os_family] | default(_openvpn_user['default']) }}"
 
 _openvpn_group:
   default: nobody
   Debian: nogroup
+  FreeBSD: openvpn
   RedHat: &redhat_group openvpn
   Rocky: *redhat_group
+
+openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 
 _openvpn_configuration_directory:
   client:
     default: /etc/openvpn/client
     Debian: /etc/openvpn
+    FreeBSD: /usr/local/etc/openvpn
     RedHat-7: /etc/openvpn
   server:
     default: /etc/openvpn/server
     Debian: /etc/openvpn
+    FreeBSD: /usr/local/etc/openvpn
     RedHat-7: /etc/openvpn
 
 openvpn_configuration_directory: "{{ _openvpn_configuration_directory[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_configuration_directory[openvpn_role][ansible_os_family] | default(_openvpn_configuration_directory[openvpn_role]['default'])) }}"
 
-openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
-
 _openvpn_service:
   server:
     default: openvpn@server
+    FreeBSD: openvpn
     RedHat-7: openvpn@server
     RedHat: &redhat_sever_service openvpn-server@server
     Rocky: *redhat_sever_service
     Ubuntu: openvpn
   client:
     default: openvpn@client
+    FreeBSD: openvpn
     RedHat-7: openvpn@client
     RedHat: &redhat_client_service openvpn-client@client
     Rocky: *redhat_client_service

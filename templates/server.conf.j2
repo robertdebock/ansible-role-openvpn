@@ -1,26 +1,14 @@
 {{ ansible_managed | comment }}
 
-port 1194
-proto udp
-dev tun
-ca /etc/openvpn/server/ca.crt
-cert /etc/openvpn/server/server.crt
-key /etc/openvpn/server/server.key
-dh /etc/openvpn/server/dh.pem
-topology subnet
-server 10.8.0.0 255.255.255.0
-ifconfig-pool-persist ipp.txt
-push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 1.1.1.1"
-push "dhcp-option DNS 1.0.0.1"
-keepalive 10 120
-# tls-crypt /etc/openvpn/server/myvpn.tlsauth 0
-cipher AES-256-CBC
-user nobody
+port {{ openvpn_port }}
+proto {{ openvpn_proto }}
+dev {{ openvpn_device }}
+ca {{ openvpn_ca }}
+cert {{ openvpn_cert }}
+key {{ openvpn_key }}
+dh {{ openvpn_dh }}
+user {{ openvpn_user }}
 group {{ openvpn_group }}
-persist-key
-persist-tun
-status openvpn-status.log
-verb 3
-explicit-exit-notify 1
-remote-cert-eku "TLS Web Client Authentication"
+{% for item in openvpn_options | default(default_openvpn_options[openvpn_role]) %}
+{{ item }}
+{% endfor %}

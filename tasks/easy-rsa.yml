@@ -1,0 +1,66 @@
+---
+
+- name: ensure easy-rsa directory exists
+  ansible.builtin.file:
+    path: "{{ openvpn_easyrsa_path }}"
+    state: directory
+    mode: "0755"
+
+- name: easyrsa init-pki
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki"
+
+- name: easyrsa build-ca
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki/ca.crt"
+  environment:
+    EASYRSA_BATCH: "yes"
+
+- name: easyrsa gen-dh
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki/dh.pem"
+
+- name: easyrsa build-server-full server nopass
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki/issued/server.crt"
+
+- name: easyrsa build-client-full client nopass
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki/issued/client.crt"
+
+- name: easyrsa gen-crl
+  ansible.builtin.command:
+    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
+    chdir: "{{ openvpn_easyrsa_path }}"
+    creates: "{{ openvpn_easyrsa_path }}/pki/crl.pem"
+
+- name: openvpn --genkey --secret {{ openvpn_easyrsa_path }}/pki/ta.key
+  ansible.builtin.command:
+    cmd: "openvpn --genkey --secret {{ openvpn_easyrsa_path }}/pki/ta.key"
+    creates: "{{ openvpn_easyrsa_path }}/pki/ta.key"
+
+- name: copy files to {{ openvpn_configuration_directory }}
+  ansible.builtin.copy:
+    src: "{{ openvpn_easyrsa_path }}/pki/{{ item }}"
+    dest: "{{ openvpn_configuration_directory }}/{{ item | basename }}"
+    mode: "0640"
+    remote_src: yes
+  loop:
+    - ca.crt
+    - dh.pem
+    - ta.key
+    - issued/client.crt
+    - issued/server.crt
+    - private/ca.key
+    - private/client.key
+    - private/server.key

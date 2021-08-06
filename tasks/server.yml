@@ -1,69 +1,31 @@
 ---
 
-- name: ensure /etc/openvpn/easy-rsa exists
+- name: Check if ta.key exists
+  stat:
+    path: "{{ openvpn_configuration_directory }}/ta.key"
+  register: ta_key
+
+- name: setup the ta.key file
+  ansible.builtin.include_tasks:
+    file: 'easy-rsa.yml'
+  when: not ta_key.stat.exists
+
+- name: ensure ccd directory exists
   ansible.builtin.file:
-    path: /etc/openvpn/easy-rsa
+    path: "{{ openvpn_configuration_directory }}/ccd"
     state: directory
-    mode: "0755"
+    owner: root
+    group: "{{ openvpn_group }}"
+    mode: "0750"
 
-- name: easyrsa init-pki
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki
-
-- name: easyrsa build-ca
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki/ca.crt
-  environment:
-    EASYRSA_BATCH: "yes"
-
-- name: easyrsa gen-dh
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki/dh.pem
-
-- name: easyrsa build-server-full server nopass
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki/issued/server.crt
-
-- name: easyrsa build-client-full client nopass
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki/issued/client.crt
-
-- name: easyrsa gen-crl
-  ansible.builtin.command:
-    cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
-    chdir: /etc/openvpn/easy-rsa
-    creates: /etc/openvpn/easy-rsa/pki/crl.pem
-
-- name: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
-  ansible.builtin.command:
-    cmd: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
-    creates: /etc/openvpn/easy-rsa/pki/ta.key
-
-- name: copy files to /etc/openvpn/server
-  ansible.builtin.copy:
-    src: /etc/openvpn/easy-rsa/pki/{{ item }}
-    dest: /etc/openvpn/server/{{ item | basename }}
+- name: create ccd/host files
+  ansible.builtin.template:
+    src: ccd.conf.j2
+    dest: "{{ openvpn_configuration_directory }}/ccd/{{ item }}"
+    owner: root
+    group: "{{ openvpn_group }}"
     mode: "0640"
-    remote_src: yes
-  loop:
-    - ca.crt
-    - dh.pem
-    - ta.key
-    - issued/client.crt
-    - issued/server.crt
-    - private/ca.key
-    - private/client.key
-    - private/server.key
+  with_items: '{{ ccd_hosts | default([]) }}'
 
 - name: place server.conf
   ansible.builtin.template:

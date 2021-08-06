@@ -29,6 +29,9 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - focal
+    - name: FreeBSD
+      versions:
+        - 12.2
 
   galaxy_tags:
     - openvpn

@@ -11,11 +11,25 @@
     name: "{{ openvpn_packages }}"
     state: present
 
+- name: ensure openvpn directory exists
+  ansible.builtin.file:
+    path: "{{ openvpn_configuration_directory }}"
+    state: directory
+    owner: root
+    group: "{{ openvpn_group }}"
+    mode: "0750"
+
 - name: setup openvpn server or client
   ansible.builtin.include_tasks:
     file: "{{ openvpn_role }}.yml"
-  when:
-    - openvpn_role == "server"
+
+- name: "update rc.conf to find the openvpn config file"
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*openvpn_configfile\s*=(.*)$'
+    line: 'openvpn_configfile="{{ openvpn_configuration_directory }}/{{ openvpn_role }}.conf"'
+  when: ansible_os_family == "FreeBSD"
+  notify: restart openvpn
 
 - name: start and enable openvpn
   ansible.builtin.service:
