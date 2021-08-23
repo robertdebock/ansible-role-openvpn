@@ -14,8 +14,6 @@
 - name: setup openvpn server or client
   ansible.builtin.include_tasks:
     file: "{{ openvpn_role }}.yml"
-  when:
-    - openvpn_role in [ "client", "server" ]
 
 - name: start and enable openvpn
   ansible.builtin.service:
