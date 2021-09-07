@@ -125,7 +125,6 @@ If you find issues, please register them in [GitHub](https://github.com/robertde
 
 Apache-2.0
 
-
 ## [Author Information](#author-information)
 
 [Robert de Bock](https://robertdebock.nl/)
