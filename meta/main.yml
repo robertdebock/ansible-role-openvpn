@@ -14,8 +14,7 @@ galaxy_info:
         - Candidate
     - name: Debian
       versions:
-        - buster
-        - bullseye
+        - all
     - name: EL
       versions:
         - 8
@@ -24,8 +23,8 @@ galaxy_info:
         - all
     - name: Debian
       versions:
-        - buster
         - bullseye
+        - bookwork
     - name: Ubuntu
       versions:
         - focal
