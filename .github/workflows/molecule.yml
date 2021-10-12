@@ -22,7 +22,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@2.6.16
+        uses: robertdebock/molecule-action@2.7.0
         with:
           command: lint
   test:
@@ -38,8 +38,8 @@ jobs:
           - image: "debian"
             tag: "latest"
           - image: "debian"
-            tag: "bullseye"
-          - image: "rockylinux"
+            tag: "bookworm"
+          - image: "enterpriselinux"
             tag: "latest"
           - image: "fedora"
             tag: "33"
@@ -50,7 +50,7 @@ jobs:
           - image: "debian"
             tag: "latest"
           - image: "debian"
-            tag: "bullseye"
+            tag: "bookworm"
           - image: "ubuntu"
             tag: "latest"
     steps:
@@ -63,7 +63,7 @@ jobs:
       - name: parse apparmor for mysql
         run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
       - name: molecule
-        uses: robertdebock/molecule-action@2.6.16
+        uses: robertdebock/molecule-action@2.7.0
         with:
           image: ${{ matrix.config.image }}
           tag: ${{ matrix.config.tag }}

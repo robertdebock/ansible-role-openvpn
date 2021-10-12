@@ -1,5 +1,5 @@
 ---
-image: robertdebock/github-action-molecule:3.0.6
+image: robertdebock/github-action-molecule:3.3.0
 
 services:
   - docker:dind
@@ -21,8 +21,8 @@ molecule:
       - image: "debian"
         tag: "latest"
       - image: "debian"
-        tag: "bullseye"
-      - image: "rockylinux"
+        tag: "bookworm"
+      - image: "enterpriselinux"
         tag: "latest"
       - image: "fedora"
         tag: "33"
@@ -33,7 +33,7 @@ molecule:
       - image: "debian"
         tag: "latest"
       - image: "debian"
-        tag: "bullseye"
+        tag: "bookworm"
       - image: "ubuntu"
         tag: "latest"
 

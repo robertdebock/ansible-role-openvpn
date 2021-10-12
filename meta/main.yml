@@ -24,7 +24,7 @@ galaxy_info:
     - name: Debian
       versions:
         - bullseye
-        - bookwork
+        - bookworm
     - name: Ubuntu
       versions:
         - focal
