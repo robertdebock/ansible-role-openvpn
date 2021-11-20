@@ -65,6 +65,16 @@
     - private/client.key
     - private/server.key
 
+- name: copy files to /etc/openvpn
+  ansible.builtin.copy:
+    src: /etc/openvpn/easy-rsa/pki/{{ item }}
+    dest: /etc/openvpn/{{ item | basename }}
+    mode: "0640"
+    remote_src: yes
+  loop:
+    - ca.crt
+    - ta.key
+
 - name: place server.conf
   ansible.builtin.template:
     src: server.conf.j2
