@@ -45,8 +45,6 @@ jobs:
             tag: "34"
           - image: "fedora"
             tag: "latest"
-          - image: "fedora"
-            tag: "rawhide"
           - image: "debian"
             tag: "latest"
           - image: "debian"
