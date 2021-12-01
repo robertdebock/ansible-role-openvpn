@@ -40,7 +40,7 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
         name: robertdebock.openvpn
       vars:
         openvpn_role: "client"
-        openvpn_client_server: 127.0.0.1
+        openvpn_client_server: "127.0.0.1"
 ```
 
 The machine needs to be prepared. In CI this is done using `molecule/default/prepare.yml`:

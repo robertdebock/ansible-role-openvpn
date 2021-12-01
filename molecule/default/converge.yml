@@ -28,4 +28,4 @@
         name: ansible-role-openvpn
       vars:
         openvpn_role: "client"
-        openvpn_client_server: 127.0.0.1
+        openvpn_client_server: "127.0.0.1"
