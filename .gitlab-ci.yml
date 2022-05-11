@@ -25,15 +25,17 @@ molecule:
       - image: "enterpriselinux"
         tag: "latest"
       - image: "fedora"
-        tag: "34"
+        tag: "35"
       - image: "fedora"
         tag: "latest"
+      - image: "fedora"
+        tag: "rawhide"
       - image: "debian"
         tag: "latest"
       - image: "debian"
         tag: "bookworm"
       - image: "ubuntu"
-        tag: "latest"
+        tag: "focal"
 
 galaxy:
   script:
