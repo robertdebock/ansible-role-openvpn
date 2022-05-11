@@ -107,7 +107,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |amazon|Candidate|
 |debian|all|
 |el|8|
-|fedora|34, 35|
+|fedora|all|
 |debian|bullseye, bookworm|
 |ubuntu|focal|
 
