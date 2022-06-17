@@ -6,4 +6,4 @@
     name: "{{ openvpn_service }}"
     state: restarted
   when:
-    - not ansible_check_mode | bool
+    - not ansible_check_mode
