@@ -1,7 +1,6 @@
 ---
 galaxy_info:
-  author: Robert de Bock
-  namespace: robertdebock
+  author: robertdebock
   role_name: openvpn
   description: Install and configure openvpn server or client on your system.
   license: Apache-2.0
@@ -17,10 +16,10 @@ galaxy_info:
         - all
     - name: EL
       versions:
-        - 8
+        - "8"
     - name: Fedora
       versions:
-        - 35
+        - "35"
     - name: Debian
       versions:
         - bullseye
