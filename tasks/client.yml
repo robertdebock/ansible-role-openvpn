@@ -1,6 +1,6 @@
 ---
 
-- name: ensure /etc/openvpn/client exists
+- name: Ensure /etc/openvpn/client exists
   ansible.builtin.file:
     path: /etc/openvpn/client
     state: directory
@@ -8,7 +8,7 @@
     group: "{{ openvpn_group }}"
     mode: "0750"
 
-- name: place client.conf
+- name: Place client.conf
   ansible.builtin.template:
     src: client.conf.j2
     dest: "{{ openvpn_configuration_directory }}/client.conf"
@@ -16,4 +16,4 @@
     group: "{{ openvpn_group }}"
     mode: "0640"
   notify:
-    - restart openvpn
+    - Restart openvpn

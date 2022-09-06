@@ -1,21 +1,21 @@
 ---
 # tasks file for openvpn
 
-- name: import assert.yml
+- name: Import assert.yml
   ansible.builtin.import_tasks: assert.yml
   run_once: yes
   delegate_to: localhost
 
-- name: install openvpn packages
+- name: Install openvpn packages
   ansible.builtin.package:
     name: "{{ openvpn_packages }}"
     state: present
 
-- name: setup openvpn server or client
+- name: Setup openvpn server or client
   ansible.builtin.include_tasks:
     file: "{{ openvpn_role }}.yml"
 
-- name: start and enable openvpn
+- name: Start and enable openvpn
   ansible.builtin.service:
     name: "{{ openvpn_service }}"
     state: started
