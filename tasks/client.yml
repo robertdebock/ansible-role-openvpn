@@ -10,7 +10,7 @@
 
 - name: Place client.conf
   ansible.builtin.template:
-    src: client.conf.j2
+    src: "{{openvpn_template_folder}}/client.conf.j2"
     dest: "{{ openvpn_configuration_directory }}/client.conf"
     owner: root
     group: "{{ openvpn_group }}"
