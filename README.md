@@ -110,7 +110,6 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |amazon|Candidate|
 |debian|all|
 |el|8|
-|fedora|35|
 |debian|bullseye, bookworm|
 |ubuntu|focal|
 
