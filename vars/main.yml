@@ -15,7 +15,7 @@ _openvpn_easyrsa_path:
   default: /usr/share/easy-rsa/3
   Debian: /usr/share/easy-rsa
 
-openvpn_easyrsa_path: "{{ _openvpn_easyrsa_path[ansible_os_family] | default(_openvpn_easyrsa_path['default'] ) }}"
+openvpn_easyrsa_path: "{{ _openvpn_easyrsa_path[ansible_os_family] | default(_openvpn_easyrsa_path['default']) }}"
 
 _openvpn_group:
   default: nobody
@@ -34,7 +34,7 @@ _openvpn_configuration_directory:
 
 openvpn_configuration_directory: "{{ _openvpn_configuration_directory[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_configuration_directory[openvpn_role][ansible_os_family] | default(_openvpn_configuration_directory[openvpn_role]['default'] )) }}"
 
-openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default'] ) }}"
+openvpn_group: "{{ _openvpn_group[ansible_os_family] | default(_openvpn_group['default']) }}"
 
 _openvpn_service:
   server:
