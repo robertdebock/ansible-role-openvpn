@@ -110,7 +110,7 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |[Amazon](https://hub.docker.com/repository/docker/robertdebock/amazonlinux/general)|Candidate|
 |[Debian](https://hub.docker.com/repository/docker/robertdebock/debian/general)|all|
 |[EL](https://hub.docker.com/repository/docker/robertdebock/enterpriselinux/general)|8|
-|[Debian](https://hub.docker.com/repository/docker/robertdebock/debian/general)|bullseye, bookworm|
+|[Debian](https://hub.docker.com/repository/docker/robertdebock/debian/general)|all|
 |[Ubuntu](https://hub.docker.com/repository/docker/robertdebock/ubuntu/general)|focal|
 
 The minimum version of Ansible required is 2.12, tests have been done to:
