@@ -48,17 +48,14 @@ The machine needs to be prepared. In CI this is done using [`molecule/default/pr
 
 ```yaml
 ---
-- name: Prepare server
+- name: Prepare
   hosts: all
-  gather_facts: no
   become: yes
+  gather_facts: no
 
   roles:
     - role: robertdebock.bootstrap
-    # - role: robertdebock.buildtools
     - role: robertdebock.epel
-    # - role: robertdebock.python_pip
-    # - role: robertdebock.openssl
 ```
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
