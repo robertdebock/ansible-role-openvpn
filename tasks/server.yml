@@ -1,18 +1,18 @@
 ---
 
-- name: Ensure /etc/openvpn/easy-rsa exists
+- name: server | Ensure /etc/openvpn/easy-rsa exists
   ansible.builtin.file:
     path: /etc/openvpn/easy-rsa
     state: directory
     mode: "0755"
 
-- name: Easyrsa init-pki
+- name: server | Easyrsa init-pki
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa init-pki"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki
 
-- name: Easyrsa build-ca
+- name: server | Easyrsa build-ca
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-ca nopass"
     chdir: /etc/openvpn/easy-rsa
@@ -20,36 +20,36 @@
   environment:
     EASYRSA_BATCH: "yes"
 
-- name: Easyrsa gen-dh
+- name: server | Easyrsa gen-dh
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-dh"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/dh.pem
 
-- name: Easyrsa build-server-full server nopass
+- name: server | Easyrsa build-server-full server nopass
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/server.crt
 
-- name: Easyrsa build-client-full client nopass
+- name: server | Easyrsa build-client-full client nopass
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/client.crt
 
-- name: Easyrsa gen-crl
+- name: server | Easyrsa gen-crl
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa gen-crl"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/crl.pem
 
-- name: Openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
+- name: server | Openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
   ansible.builtin.command:
     cmd: openvpn --genkey --secret /etc/openvpn/easy-rsa/pki/ta.key
     creates: /etc/openvpn/easy-rsa/pki/ta.key
 
-- name: Copy files to /etc/openvpn/server
+- name: server | Copy files to /etc/openvpn/server
   ansible.builtin.copy:
     src: /etc/openvpn/easy-rsa/pki/{{ item }}
     dest: /etc/openvpn/server/{{ item | basename }}
@@ -65,7 +65,7 @@
     - private/client.key
     - private/server.key
 
-- name: Copy files to /etc/openvpn
+- name: server | Copy files to /etc/openvpn
   ansible.builtin.copy:
     src: /etc/openvpn/easy-rsa/pki/{{ item }}
     dest: /etc/openvpn/{{ item | basename }}
@@ -75,7 +75,7 @@
     - ca.crt
     - ta.key
 
-- name: Place server.conf
+- name: server | Place server.conf
   ansible.builtin.template:
     src: server.conf.j2
     dest: "{{ openvpn_configuration_directory }}/server.conf"
