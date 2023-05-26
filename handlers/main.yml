@@ -5,5 +5,3 @@
   ansible.builtin.service:
     name: "{{ openvpn_service }}"
     state: restarted
-  when:
-    - not ansible_check_mode
