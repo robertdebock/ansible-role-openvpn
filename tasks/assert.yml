@@ -13,6 +13,7 @@
     that:
       - openvpn_client_server is defined
       - openvpn_client_server is string
+      - openvpn_client_server is not none
     quiet: yes
   when:
     - openvpn_role == "client"
