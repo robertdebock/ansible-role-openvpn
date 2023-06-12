@@ -5,13 +5,13 @@
   gather_facts: yes
 
   tasks:
-    - name: create openvpn server
+    - name: Create openvpn server
       ansible.builtin.include_role:
         name: ansible-role-openvpn
       vars:
         openvpn_role: "server"
 
-    - name: copy certificates and keys from the server to the client
+    - name: Copy certificates and keys from the server to the client
       ansible.builtin.copy:
         src: /etc/openvpn/easy-rsa/pki/{{ item }}
         dest: /etc/openvpn/client/{{ item | basename }}
@@ -23,7 +23,7 @@
         - private/client.key
         - ta.key
 
-    - name: create openvpn client
+    - name: Create openvpn client
       ansible.builtin.include_role:
         name: ansible-role-openvpn
       vars:
