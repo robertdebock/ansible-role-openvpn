@@ -17,7 +17,7 @@ molecule:
       - image: "debian"
         tag: "latest"
       - image: "debian"
-        tag: "bookworm"
+        tag: "bullseye"
       - image: "enterpriselinux"
         tag: "8"
       - image: "enterpriselinux"
@@ -25,7 +25,7 @@ molecule:
       - image: "debian"
         tag: "latest"
       - image: "debian"
-        tag: "bookworm"
+        tag: "bullseye"
       - image: "ubuntu"
         tag: "focal"
 
