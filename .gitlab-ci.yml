@@ -14,10 +14,6 @@ molecule:
     matrix:
       - image: "amazonlinux"
         tag: "latest"
-      - image: "debian"
-        tag: "latest"
-      - image: "debian"
-        tag: "bullseye"
       - image: "enterpriselinux"
         tag: "8"
       - image: "enterpriselinux"

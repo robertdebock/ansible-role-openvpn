@@ -11,9 +11,6 @@ galaxy_info:
     - name: Amazon
       versions:
         - Candidate
-    - name: Debian
-      versions:
-        - all
     - name: EL
       versions:
         - "8"
