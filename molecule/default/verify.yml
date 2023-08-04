@@ -2,8 +2,34 @@
 - name: Verify
   hosts: all
   become: yes
-  gather_facts: no
+  gather_facts: yes
+
+  vars:
+    _openvpn_verify_requirements:
+      default:
+        - procps
+      RedHat:
+        - procps-ng
+    openvpn_verify_requirements: "{{ _openvpn_verify_requirements[ansible_os_family] | default(_openvpn_verify_requirements['default']) }}"
 
   tasks:
-    - name: Check if connection still works
-      ansible.builtin.ping:
+    - name: Install requirements
+      ansible.builtin.package:
+        name: "{{ openvpn_verify_requirements }}"
+      notify:
+        - Uninstall requirements
+
+    - name: Gather facts on listening ports
+      community.general.listen_ports_facts:
+
+    - name: Check if UPD port 1194 is listening
+      assert:
+        that:
+          - 1194 in ansible_facts.udp_listen | map(attribute='port')
+        quiet: yes
+
+  handlers:
+    - name: Uninstall requirements
+      ansible.builtin.package:
+        name: "{{ openvpn_verify_requirements }}"
+        state: absent
