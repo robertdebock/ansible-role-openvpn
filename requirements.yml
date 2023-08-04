@@ -3,3 +3,6 @@
 roles:
   - name: robertdebock.bootstrap
   - name: robertdebock.epel
+
+collections:
+  - name: community.general
