@@ -31,12 +31,16 @@
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-server-full server nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/server.crt
+  environment:
+    EASYRSA_BATCH: "yes"
 
 - name: server | Easyrsa build-client-full client nopass
   ansible.builtin.command:
     cmd: "{{ openvpn_easyrsa_path }}/easyrsa build-client-full client nopass"
     chdir: /etc/openvpn/easy-rsa
     creates: /etc/openvpn/easy-rsa/pki/issued/client.crt
+  environment:
+    EASYRSA_BATCH: "yes"
 
 - name: server | Easyrsa gen-crl
   ansible.builtin.command:
