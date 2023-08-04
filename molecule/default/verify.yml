@@ -8,6 +8,9 @@
     _openvpn_verify_requirements:
       default:
         - procps
+      Debian:
+        - net-tools
+        - procps
       RedHat:
         - procps-ng
     openvpn_verify_requirements: "{{ _openvpn_verify_requirements[ansible_os_family] | default(_openvpn_verify_requirements['default']) }}"
