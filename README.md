@@ -1,4 +1,4 @@
-# [openvpn](#openvpn)
+# Ansible role [openvpn](#openvpn)
 
 Install and configure openvpn server or client on your system.
 
@@ -104,9 +104,9 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 
 |container|tags|
 |---------|----|
-|[EL](https://hub.docker.com/repository/docker/robertdebock/enterpriselinux/general)|7, 8|
-|[Debian](https://hub.docker.com/repository/docker/robertdebock/debian/general)|all|
-|[Ubuntu](https://hub.docker.com/repository/docker/robertdebock/ubuntu/general)|focal|
+|[EL](https://hub.docker.com/r/robertdebock/enterpriselinux)|7, 8|
+|[Debian](https://hub.docker.com/r/robertdebock/debian)|all|
+|[Ubuntu](https://hub.docker.com/r/robertdebock/ubuntu)|focal|
 
 The minimum version of Ansible required is 2.12, tests have been done to:
 
