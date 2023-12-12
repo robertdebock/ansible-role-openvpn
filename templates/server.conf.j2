@@ -30,6 +30,9 @@ cipher {{ openvpn_cipher }}
 {% if openvpn_tun_mtu %}
 tun-mtu {{ openvpn_tun_mtu }}
 {% endif %}
+{% if openvpn_fragment %}
+fragment {{ openvpn_fragment }}
+{% endif %}
 {% if openvpn_use_hardened_tls|bool %}
 tls-version-min 1.2
 {% endif %}
