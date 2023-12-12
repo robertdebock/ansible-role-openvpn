@@ -120,5 +120,5 @@ client-disconnect {{ openvpn_script_client_disconnect }}
 {% endif %}
 
 {% if openvpn_txqueuelen is defined %}
-txqueuelen {{% openvpn_txqueuelen %}}
+txqueuelen {{ openvpn_txqueuelen }}
 {% endif %}
