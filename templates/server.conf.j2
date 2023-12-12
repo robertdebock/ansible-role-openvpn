@@ -1,26 +1,117 @@
 {{ ansible_managed | comment }}
 
-port 1194
-proto udp
-dev tun
-ca /etc/openvpn/server/ca.crt
-cert /etc/openvpn/server/server.crt
-key /etc/openvpn/server/server.key
-dh /etc/openvpn/server/dh.pem
-topology subnet
-server 10.8.0.0 255.255.255.0
-ifconfig-pool-persist ipp.txt
+{% if openvpn_local is defined %}
+local {{ openvpn_local }}
+{% endif %}
+port {{ openvpn_port }}
+{% if openvpn_dualstack %}
+proto {{ openvpn_proto }}6
+{% else %}
+proto {{ openvpn_proto }}
+{% endif %}
+dev {{ openvpn_dev }}
+
+ca {{ openvpn_key_dir }}/ca.crt
+cert {{ openvpn_key_dir }}/server.crt
+key {{ openvpn_key_dir }}/server.key
+dh {{ openvpn_key_dir }}/dh.pem
+{% if openvpn_crl_path is defined %}
+crl-verify {{ openvpn_crl_path }}
+{% endif %}
+{% if openvpn_use_crl|bool %}
+crl-verify {{ openvpn_key_dir }}/ca-crl.pem
+{% endif %}
+{% if tls_auth_required %}
+tls-auth {{ openvpn_key_dir }}/ta.key 0
+{% endif %}
+tls-server
+auth {{ openvpn_auth_alg | default('SHA256') }}
+cipher {{ openvpn_cipher }}
+{% if openvpn_tun_mtu %}
+tun-mtu {{ openvpn_tun_mtu }}
+{% endif %}
+{% if openvpn_use_hardened_tls|bool %}
+tls-version-min 1.2
+{% endif %}
+{# Using Mozilla's modern cipher list + DHE for older clients #}
+{% if openvpn_use_modern_tls|bool %}
+tls-cipher TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-ECDHE-ECDSA-WITH-AES-256-CBC-SHA384:TLS-ECDHE-RSA-WITH-AES-256-CBC-SHA384:TLS-DHE-RSA-WITH-AES-256-CBC-SHA256
+{% endif %}
+{% if openvpn_duplicate_cn|bool %}
+duplicate-cn
+{% endif %}
+{% if openvpn_client_to_client|bool %}
+client-to-client
+{% endif %}
+
+server {{ openvpn_server_network }} {{ openvpn_server_netmask }}
+{% if openvpn_server_ipv6_network is defined %}
+server-ipv6 {{ openvpn_server_ipv6_network }}
+{% endif %}
+{% if openvpn_topology is defined %}
+topology {{ openvpn_topology }}
+{% endif %}
+ifconfig-pool-persist {{ openvpn_ifconfig_pool_persist_file }}
+{% if openvpn_client_config %}
+client-config-dir {{ openvpn_client_config_dir }}
+{% endif %}
+
+{% if openvpn_redirect_gateway|bool %}
 push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 1.1.1.1"
-push "dhcp-option DNS 1.0.0.1"
-keepalive 10 120
-# tls-crypt /etc/openvpn/server/myvpn.tlsauth 0
-cipher AES-256-CBC
-user nobody
-group {{ openvpn_group }}
+{% endif %}
+{% if openvpn_set_dns %}
+{% for srv in openvpn_dns_servers %}
+push "dhcp-option DNS {{ srv }}"
+{% endfor %}
+{% endif %}
+{% if openvpn_push is defined %}
+{% for opt in openvpn_push %}
+push "{{ opt }}"
+{% endfor %}
+{% endif %}
+keepalive {{ openvpn_keepalive_ping }} {{ openvpn_keepalive_timeout }}
+{% if openvpn_compression is not undefined and openvpn_compression != "" %}
+compress {{ openvpn_compression }}
+{% endif %}
 persist-key
 persist-tun
-status openvpn-status.log
+user {{ openvpn_service_user }}
+group {{ openvpn_service_group }}
+
+{% for option in openvpn_addl_server_options %}
+{{ option }}
+{% endfor %}
+
+status status-{{ openvpn_config_file }}.log
+status-version {{ openvpn_status_version }}
+log-append {{ openvpn_log_dir }}/{{ openvpn_log_file }}
 verb 3
-explicit-exit-notify 1
-remote-cert-eku "TLS Web Client Authentication"
+
+{% if openvpn_verify_cn|bool %}
+verify-x509-name OpenVPN-Client-{{ inventory_hostname[:24] }} name-prefix
+remote-cert-tls client
+{% endif %}
+
+{% if openvpn_enable_management|bool %}
+management {{ openvpn_management_bind }}
+{% if openvpn_management_client_user %}
+management-client-user {{ openvpn_management_client_user }}
+{% endif %}
+{% endif %}
+
+script-security {{ openvpn_script_security }}
+
+{% if openvpn_script_up is defined %}
+up {{ openvpn_script_up }}
+{% endif %}
+{% if openvpn_script_down is defined %}
+down {{ openvpn_script_down }}
+{% endif %}
+
+
+{% if openvpn_script_client_connect is defined %}
+client-connect {{ openvpn_script_client_connect }}
+{% endif %}
+{% if openvpn_script_client_disconnect is defined %}
+client-disconnect {{ openvpn_script_client_disconnect }}
+{% endif %}
