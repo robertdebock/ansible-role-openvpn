@@ -9,7 +9,7 @@ openvpn_dns_servers:
   - 1.1.1.1
   - 8.8.8.8
   - 8.8.4.4
-openvpn_dualstack: true
+openvpn_dualstack: false
 openvpn_keepalive_ping: 5
 openvpn_keepalive_timeout: 30
 openvpn_port: 1194
