@@ -21,10 +21,10 @@ crl-verify {{ openvpn_crl_path }}
 {% if openvpn_use_crl|bool %}
 crl-verify {{ openvpn_key_dir }}/ca-crl.pem
 {% endif %}
-{% if tls_auth_required %}
+{% if openvpn_tls_auth_required %}
 tls-auth {{ openvpn_key_dir }}/ta.key 0
 {% endif %}
-{% if tls_server_required %}
+{% if openvpn_tls_server_required %}
 tls-server
 {% endif %}
 auth {{ openvpn_auth_alg | default('SHA256') }}

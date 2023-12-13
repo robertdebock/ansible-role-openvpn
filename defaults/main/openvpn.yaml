@@ -33,8 +33,8 @@ openvpn_use_hardened_tls: true
 openvpn_use_modern_tls: true
 openvpn_use_pregenerated_dh_params: false
 openvpn_verify_cn: false
-tls_auth_required: true
-tls_server_required: true
+openvpn_tls_auth_required: true
+openvpn_tls_server_required: true
 openvpn_script_security: 1
 
 # Operations
