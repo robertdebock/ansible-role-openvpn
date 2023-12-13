@@ -89,7 +89,7 @@ group {{ openvpn_service_group }}
 {{ option }}
 {% endfor %}
 
-status {{ openvpn_config_file }}.log 1
+status {{ openvpn_status_dir }}/{{ openvpn_status_file }} {{ openvpn_status_write_second }}
 status-version {{ openvpn_status_version }}
 log-append {{ openvpn_log_dir }}/{{ openvpn_log_file }}
 verb 3

@@ -49,7 +49,8 @@ openvpn_push: []
 openvpn_service_group: nogroup
 openvpn_service_user: nobody
 openvpn_status_version: 1
-openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
+openvpn_status_file: "openvpn-status.log"
+openvpn_status_write_second: 1
 
 
 # Client config - settings the server will push
