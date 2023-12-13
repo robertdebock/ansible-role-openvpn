@@ -24,7 +24,9 @@ crl-verify {{ openvpn_key_dir }}/ca-crl.pem
 {% if tls_auth_required %}
 tls-auth {{ openvpn_key_dir }}/ta.key 0
 {% endif %}
+{% if tls_server_required %}
 tls-server
+{% endif %}
 auth {{ openvpn_auth_alg | default('SHA256') }}
 cipher {{ openvpn_cipher }}
 {% if openvpn_tun_mtu %}
