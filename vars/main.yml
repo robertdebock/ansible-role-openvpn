@@ -50,8 +50,6 @@ _openvpn_service:
 
 openvpn_service: "{{ _openvpn_service[openvpn_role][ansible_os_family ~ '-' ~ ansible_distribution_major_version] | default(_openvpn_service[openvpn_role][ansible_os_family] | default(_openvpn_service[openvpn_role]['default'] )) }}"
 
-openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
-
 # Scripts
 # openvpn_script_up: "{{ openvpn_base_dir }}/up.sh"
 # openvpn_script_down: "{{ openvpn_base_dir }}/down.sh"
