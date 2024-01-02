@@ -4,7 +4,7 @@ Install and configure openvpn server or client on your system.
 
 |GitHub|GitLab|Downloads|Version|
 |------|------|---------|-------|
-|[![github](https://github.com/robertdebock/ansible-role-openvpn/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-openvpn/actions)|[![gitlab](https://gitlab.com/robertdebock-iac/ansible-role-openvpn/badges/master/pipeline.svg)](https://gitlab.com/robertdebock-iac/ansible-role-openvpn)|[![downloads](https://img.shields.io/ansible/role/d/24560)](https://galaxy.ansible.com/robertdebock/openvpn)|[![Version](https://img.shields.io/github/release/robertdebock/ansible-role-openvpn.svg)](https://github.com/robertdebock/ansible-role-openvpn/releases/)|
+|[![github](https://github.com/robertdebock/ansible-role-openvpn/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-openvpn/actions)|[![gitlab](https://gitlab.com/robertdebock-iac/ansible-role-openvpn/badges/master/pipeline.svg)](https://gitlab.com/robertdebock-iac/ansible-role-openvpn)|[![downloads](https://img.shields.io/ansible/role/d/robertdebock/openvpn)](https://galaxy.ansible.com/robertdebock/openvpn)|[![Version](https://img.shields.io/github/release/robertdebock/ansible-role-openvpn.svg)](https://github.com/robertdebock/ansible-role-openvpn/releases/)|
 
 ## [Example Playbook](#example-playbook)
 
