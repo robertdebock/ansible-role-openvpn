@@ -6,7 +6,7 @@
       - openvpn_role is defined
       - openvpn_role is string
       - openvpn_role in [ "client", "server" ]
-    quiet: yes
+    quiet: true
 
 - name: assert | Test openvpn_client_server
   ansible.builtin.assert:
@@ -14,6 +14,6 @@
       - openvpn_client_server is defined
       - openvpn_client_server is string
       - openvpn_client_server is not none
-    quiet: yes
+    quiet: true
   when:
     - openvpn_role == "client"

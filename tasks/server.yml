@@ -58,7 +58,7 @@
     src: /etc/openvpn/easy-rsa/pki/{{ item }}
     dest: /etc/openvpn/server/{{ item | basename }}
     mode: "0640"
-    remote_src: yes
+    remote_src: true
   loop:
     - ca.crt
     - dh.pem
@@ -74,7 +74,7 @@
     src: /etc/openvpn/easy-rsa/pki/{{ item }}
     dest: /etc/openvpn/{{ item | basename }}
     mode: "0640"
-    remote_src: yes
+    remote_src: true
   loop:
     - ca.crt
     - ta.key

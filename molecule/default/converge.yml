@@ -1,8 +1,8 @@
 ---
 - name: Converge
   hosts: all
-  become: yes
-  gather_facts: yes
+  become: true
+  gather_facts: true
 
   tasks:
     - name: Create openvpn server
@@ -16,7 +16,7 @@
         src: /etc/openvpn/easy-rsa/pki/{{ item }}
         dest: /etc/openvpn/client/{{ item | basename }}
         mode: "0640"
-        remote_src: yes
+        remote_src: true
       loop:
         - ca.crt
         - issued/client.crt

@@ -1,8 +1,8 @@
 ---
 - name: Verify
   hosts: all
-  become: yes
-  gather_facts: yes
+  become: true
+  gather_facts: true
 
   vars:
     _openvpn_verify_requirements:
@@ -29,7 +29,7 @@
       assert:
         that:
           - 1194 in ansible_facts.udp_listen | map(attribute='port')
-        quiet: yes
+        quiet: true
 
   handlers:
     - name: Uninstall requirements
