@@ -6,6 +6,8 @@
 
 openvpn_role: server
 
+openvpn_template_folder: .
+
 # If you are configuring a client, setup these variables:
 # openvpn_role: client
 # openvpn_client_server: vpn.example.com
