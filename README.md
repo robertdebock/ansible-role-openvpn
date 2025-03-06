@@ -20,7 +20,7 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
   tasks:
     - name: Create openvpn server
       ansible.builtin.include_role:
-        name: ansible-role-openvpn
+        name: robertdebock.openvpn
       vars:
         openvpn_role: "server"
 
@@ -38,7 +38,7 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
 
     - name: Create openvpn client
       ansible.builtin.include_role:
-        name: ansible-role-openvpn
+        name: robertdebock.openvpn
       vars:
         openvpn_role: "client"
         openvpn_client_server: "127.0.0.1"
