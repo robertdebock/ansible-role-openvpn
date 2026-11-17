@@ -12,6 +12,7 @@
         - net-tools
         - procps
       RedHat:
+        - iproute
         - procps-ng
     openvpn_verify_requirements: "{{ _openvpn_verify_requirements[ansible_facts['os_family']] | default(_openvpn_verify_requirements['default']) }}"
 
